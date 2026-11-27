@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<title>AI в веб-разработке: расширенная карта — шпаргалка · cheat-ui</title>
+<link rel="stylesheet" href="../css/cheat-ui.css">
+</head>
+<body>
+
+<!-- ================= ЛИСТ 1 ================= -->
+<div class="sheet sheet--cover">
+
+  <div class="cover">
+    <h1 class="cover__title">AI в веб-разработке</h1>
+   
+  </div>
+
+  <section class="block accent-blue">
+    <h3 class="block-title">Вся карта рынка <span class="block-title__hint">вендор → инструмент → модель → токены</span></h3>
+    <table class="table">
+      <thead>
+        <tr><th>Вендор и инструменты</th><th>Модель</th><th>Применение</th><th>Токены</th><th>Запомнить</th></tr>
+      </thead>
+      <tbody>
+        <tr><td colspan="5" style="text-align: center;"><b>OpenAI · GPT (ДЖПТ)</b> · Codex CLI (Кодекс) · ChatGPT · API · расширения</td></tr>
+        <tr><td>OpenAI</td><td>GPT-6.2 Astra</td><td>финальный план, критический ревью</td><td>8–12×</td><td>самый дорогой слой</td></tr>
+        <tr><td>OpenAI</td><td>GPT-6.2 Sol</td><td>долгие задачи в Codex</td><td>4–6×</td><td>качество/цена</td></tr>
+        <tr><td>OpenAI</td><td>GPT-5.6 Terra</td><td>код, инструменты, рефактор</td><td>2–3×</td><td>рабочая лошадка</td></tr>
+        <tr><td>OpenAI</td><td>GPT-6 Luna</td><td>explain, батчи, рутина</td><td>1×</td><td>дешёвая база</td></tr>
+
+        <tr><td colspan="5" style="text-align: center;"><b>Anthropic (Антропик) · Claude (Клод)</b> · Claude Code · Claude app · Claude in Chrome</td></tr>
+        <tr><td>Anthropic</td><td>Fable 5.2</td><td>критический план и ревью</td><td>8–12×</td><td>только для сложных кейсов</td></tr>
+        <tr><td>Anthropic</td><td>Opus 5.5</td><td>план, архитектура, баг</td><td>4–6×</td><td>«мозг» агента</td></tr>
+        <tr><td>Anthropic</td><td>Sonnet 5.5</td><td>код, рефактор, тесты</td><td>2–3×</td><td>баланс для кода</td></tr>
+        <tr><td>Anthropic</td><td>Haiku 5.5</td><td>explain, быстрые правки</td><td>1×</td><td>массовые задачи</td></tr>
+
+        <tr><td colspan="5" style="text-align: center;"><b>Google · Gemini (Джемини)</b> · Antigravity CLI (agy) · Gemini CLI (enterprise) · AI Studio</td></tr>
+        <tr><td>Google</td><td>Gemini 4 Carbon</td><td>сложный reasoning</td><td>6–10×</td><td>тяжёлый план</td></tr>
+        <tr><td>Google</td><td>Gemini 4 Argon</td><td>план, длинный контекст</td><td>2–4×</td><td>большой репо</td></tr>
+        <tr><td>Google</td><td>Gemini 4 Hydrogen</td><td>агент, мультимодал</td><td>1–2×</td><td>макеты и код</td></tr>
+        <tr><td>Google</td><td>Gemini 3.5 Flash Lite</td><td>батчи, простые ответы</td><td>1×</td><td>дешёвый слой</td></tr>
+
+        <tr><td colspan="5" style="text-align: center;"><b>OpenCode (Open Code)</b> · OpenCode CLI/TUI · desktop · Console — это harness, не модель</td></tr>
+        <tr><td>OpenCode</td><td>любая модель провайдера</td><td>Claude / GPT / Gemini / GLM / DeepSeek</td><td>зависит</td><td>BYOK из коробки</td></tr>
+        <tr><td>OpenCode</td><td>Big Pickle, Iceman Free</td><td>stealth-модели, тест фич</td><td>1×</td><td>бесплатно на время</td></tr>
+
+        <tr><td colspan="5" style="text-align: center;"><b>Z.ai</b> · GLM (ДжиЭлЭм) · ZCode CLI · GLM Coding Plan · endpoint для Claude Code/Codex</td></tr>
+        <tr><td>Z.ai</td><td>GLM 5.4 / 5.3</td><td>код, план, агент</td><td>2–4×</td><td>китайский баланс</td></tr>
+        <tr><td>Z.ai</td><td>GLM 5.3 Flash</td><td>батчи, дешёвые правки</td><td>1×</td><td>быстро и дёшево</td></tr>
+
+        <tr><td colspan="5" style="text-align: center;"><b>Alibaba (Алибаба) · Qwen / Qween (Квэн)</b> · Qwen Code 1.0 Preview CLI · Desktop · API</td></tr>
+        <tr><td>Alibaba</td><td>Qwen3.8 Max</td><td>план, код, длинный контекст</td><td>2–4×</td><td>флагман</td></tr>
+        <tr><td>Alibaba</td><td>Qwen3.8 Flash</td><td>быстрый код и explain</td><td>1×</td><td>дешёвый агент</td></tr>
+        <tr><td>Alibaba</td><td>Qwen3.5 Plus</td><td>рутинные задачи</td><td>1–2×</td><td>стабильный бюджет</td></tr>
+
+        <tr><td colspan="5" style="text-align: center;"><b>Moonshot · Kimi</b> · Kimi Code CLI · Desktop · VS Code · API</td></tr>
+        <tr><td>Kimi</td><td>Kimi K3.1 Pro</td><td>сложный код и план</td><td>4–6×</td><td>тяжёлый режим</td></tr>
+        <tr><td>Kimi</td><td>Kimi K2.7 Code</td><td>код, агент, рефактор</td><td>2–3×</td><td>coding-профиль</td></tr>
+        <tr><td>Kimi</td><td>Kimi K2.6</td><td>бюджетные задачи</td><td>1–2×</td><td>быстрый и дешёвый</td></tr>
+
+        <tr><td colspan="5" style="text-align: center;"><b>Xiaomi (Сяоми) · MiMo (МиМо)</b> · MiMo Code CLI · OpenCode free · API</td></tr>
+        <tr><td>Xiaomi</td><td>MiMo-V2.6-Flash</td><td>быстрые задачи, experiment</td><td>1×</td><td>бесплатно в OpenCode</td></tr>
+
+        <tr><td colspan="5" style="text-align: center;"><b>DeepSeek (ДипСик)</b> · DeepSeek Harness (dsh) · API · Claude Code, Codex, OpenCode</td></tr>
+        <tr><td>DeepSeek</td><td>DeepSeek V4 Pro</td><td>рефактор, код, plan B</td><td>2–3×</td><td>очень дешёвый API</td></tr>
+        <tr><td>DeepSeek</td><td>DeepSeek V4.1 Flash</td><td>батчи, massive-правки</td><td>1×</td><td>есть free-вариант</td></tr>
+
+        <tr><td colspan="5" style="text-align: center;"><b>Nvidia (Нвидиа) · Nemotron (Немотрон)</b> · отдельного CLI нет · NIM · OpenCode free</td></tr>
+        <tr><td>Nvidia</td><td>Nemotron 3.5 Super VL</td><td>мультимодал, анализ скриншотов</td><td>1–2×</td><td>trial: не скидывайте секреты</td></tr>
+        <tr><td>Nvidia</td><td>Nemotron 3.5 Lightning</td><td>быстрые локальные задачи</td><td>1×</td><td>бесплатно на время</td></tr>
+
+        <tr><td colspan="5" style="text-align: center;"><b>xAI · Grok (Грок)</b> · публичного coding CLI нет · Cursor CLI / OpenCode / API</td></tr>
+        <tr><td>xAI</td><td>Grok 4.7</td><td>код, reasoning, поиск в X</td><td>2–4×</td><td>сильная связка с X</td></tr>
+        <tr><td>xAI</td><td>Grok Build 0.1</td><td>дешёвый coding-агент</td><td>1×</td><td>новый бюджетный слой</td></tr>
+
+        <tr><td colspan="5" style="text-align: center;"><b>Yandex (Яндекс) · Alisa / Alice AI LLM (Алиса)</b> · Yandex Cloud · приложение Алиса</td></tr>
+        <tr><td>Yandex</td><td>Alice AI LLM</td><td>агент, код, русский контекст</td><td>2–3×</td><td>российский стек</td></tr>
+        <tr><td>Yandex</td><td>Alice AI LLM Flash</td><td>батчи, быстрые ответы</td><td>1×</td><td>дешёвый вход</td></tr>
+
+        <tr><td colspan="5" style="text-align: center;"><b>Sber (Сбер) · GigaChat (Гигачат)</b> · API · Cloud.ru</td></tr>
+        <tr><td>Sber</td><td>GigaChat 2 Max</td><td>сложные задачи, русский код</td><td>2–4×</td><td>старые тарифы — лишь действующим</td></tr>
+        <tr><td>Sber</td><td>GigaChat 2 Lite</td><td>батчи, простые правки</td><td>1×</td><td>асинхронно ещё дешевле</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+
+  <footer class="sheet-footer">
+    <span class="page-number">1 / 6</span>
+  </footer>
+</div>
+
+<!-- ================= ЛИСТ 2 ================= -->
+<div class="sheet">
+
+  <div class="sheet-head accent-cyan">
+    <span class="sheet-number">2</span>
+    <h2 class="sheet-title">Инструменты, бесплатные тарифы и BYOK</h2>
+  </div>
+
+  <div class="columns_">
+
+    <section class="block accent-teal">
+      <h3 class="block-title">CLI, IDE и расширения</h3>
+      <table class="table">
+        <thead>
+          <tr><th>Инструмент</th><th>Где работает</th><th>Модели</th><th>Чужую модель?</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Claude Code (Клод Код)</td><td>терминал, IDE, desktop, Chrome</td><td>Claude</td><td>через ANTHROPIC_BASE_URL / гейтвей</td></tr>
+          <tr><td>Codex CLI (Кодекс)</td><td>терминал, IDE, web</td><td>GPT</td><td>model_provider в config.toml</td></tr>
+          <tr><td>Cursor (Курсор)</td><td>форк VS Code + CLI</td><td>GPT/Claude/Gemini/GLM</td><td>платные планы — по API-цене</td></tr>
+          <tr><td>GitHub Copilot (Копилот)</td><td>расширение + CLI</td><td>каталог GitHub</td><td>только каталог провайдера</td></tr>
+          <tr><td>Antigravity CLI (agy)</td><td>терминал + IDE</td><td>Gemini 4 Hydrogen, Flash, Claude, GPT-OSS</td><td>потребительский агент Google</td></tr>
+          <tr><td>Gemini CLI</td><td>терминал</td><td>Gemini</td><td>с 2026 — enterprise через Code Assist</td></tr>
+          <tr><td>OpenCode (Open Code)</td><td>TUI/CLI + desktop</td><td>любые</td><td>да, нативно через провайдеров</td></tr>
+          <tr><td>Qwen Code 1.0</td><td>CLI + desktop + editor</td><td>Qwen3.8 Max / Flash</td><td>Ollama, vLLM, OpenAI-совместимые API</td></tr>
+          <tr><td>Kimi Code / MiMo Code</td><td>терминал + desktop</td><td>Kimi K3, K2.7 · MiMo-V2.6</td><td>API, импорт Claude Code auth</td></tr>
+          <tr><td>DeepSeek Harness (dsh)</td><td>терминал, dev preview</td><td>DeepSeek V4</td><td>да, через API и гейтвеи</td></tr>
+          <tr><td>Windsurf / Devin</td><td>IDE + CLI + облако</td><td>многие; Fusion = lead + sidekick</td><td>да, выбор в model selector</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section class="block accent-green">
+      <h3 class="block-title">Бесплатно, но с ограничениями</h3>
+      <table class="table">
+        <thead>
+          <tr><th>Где</th><th>Что дают</th><th>Ограничение</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>OpenCode</td><td>DeepSeek V4.1 Flash Free, MiMo-V2.6-Flash Free, Nemotron 3.5 Free, Big Pickle / Tidepool / Seaglass / Iceman</td><td>временно; часть — только внутри OpenCode и для фидбека</td></tr>
+          <tr><td>Antigravity CLI</td><td>Individual $0: app, CLI, IDE, parallel agents</td><td>недельная базовая квота; Gemini CLI — enterprise</td></tr>
+          <tr><td>Cursor</td><td>Free-план, пробный период Pro</td><td>мало запросов, нет cloud agents</td></tr>
+          <tr><td>Copilot</td><td>Free: ~2 000 completions/мес, чат и agent mode</td><td>Student — для подтверждённых; Pro даёт кредиты</td></tr>
+          <tr><td>Claude / Codex</td><td>Claude Free не даёт Claude Code; Codex — в ChatGPT Free/Go</td><td>Claude Code нужен Pro/Max; Codex Cloud — платные планы</td></tr>
+          <tr><td>Qwen / Kimi / Z.ai</td><td>постоянного free tier у CLI нет; локально — Ollama/vLLM</td><td>по подписке или pay-as-you-go API</td></tr>
+          <tr><td>DeepSeek / GigaChat</td><td>дешёвый API, гранты и льготы</td><td>почти всегда нужна регистрация и лимиты</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section class="block accent-violet">
+      <h3 class="block-title">Кто лидер по инструментарию?</h3>
+      <ul class="list list--tight">
+        <li><b>agentic coding:</b> Claude Code и Codex — самые зрелые премиальные агенты</li>
+        <li><b>IDE-опыт:</b> Cursor или Windsurf — быстрый inline-редакторинг и мультимодал</li>
+        <li><b>экосистема GitHub:</b> Copilot — меньше всего трения в корпоративном репо</li>
+        <li><b>открытость и BYOK:</b> OpenCode — модель-агностичный harness</li>
+        <li>Лидер зависит от задачи: один инструмент «лучший» только на вашем репо и смеси моделей</li>
+      </ul>
+    </section>
+
+    <section class="block accent-blue">
+      <h3 class="block-title">BYOK: чужой ключ в свой инструмент</h3>
+      <pre class="code-block"><span class="tok-comment"># Claude Code → Anthropic-совместимый endpoint DeepSeek</span>
+export <b>ANTHROPIC_BASE_URL</b>=https://api.deepseek.com/anthropic
+export <b>ANTHROPIC_AUTH_TOKEN</b>=$DEEPSEEK_API_KEY
+export ANTHROPIC_DEFAULT_SONNET_MODEL=deepseek-v4-pro
+
+<span class="tok-comment"># OpenCode: model в opencode.json</span>
+{ <span class="tok-string">"model"</span>: <span class="tok-string">"opencode/deepseek-v4.1-flash-free"</span> }
+
+<span class="tok-comment"># Codex: ~/.codex/config.toml</span>
+model = <span class="tok-string">"gpt-6.2-sol"</span>
+model_provider = <span class="tok-string">"openai"</span></pre>
+    </section>
+
+    <section class="block accent-amber">
+      <p class="callout callout--warn">
+        <span class="callout__title">важно</span>
+        Подписка и API-ключ — разные деньги: первая даёт лимит в сообщениях/кредитах, второй — счёт за токены. Через гейтвей можно потерять prompt caching и точные имена моделей, поэтому проверяйте <code>/status</code> на маленькой задаче.
+      </p>
+    </section>
+
+  </div>
+
+  <footer class="sheet-footer">
+    <span>AI в веб-разработке · расширенная версия · cheat-ui</span>
+    <span class="page-number">2 / 6</span>
+  </footer>
+</div>
+
+<!-- ================= ЛИСТ 3 ================= -->
+<div class="sheet">
+
+  <div class="sheet-head accent-violet">
+    <span class="sheet-number">3</span>
+    <h2 class="sheet-title">Словарь терминов, клавиши и экономия токенов</h2>
+  </div>
+
+  <div class="columns_">
+
+    <section class="block accent-violet">
+      <h3 class="block-title">Кто есть кто: не путаем вендора и модель</h3>
+      <table class="table">
+        <thead>
+          <tr><th>Термин</th><th>Что это</th><th>Пример</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>GPT</td><td>семейство моделей OpenAI, «трансформер» в названии</td><td>GPT-6.2 Astra, GPT-6 Luna</td></tr>
+          <tr><td>OpenAI</td><td>компания: GPT, ChatGPT, Codex</td><td>Codex CLI (Кодекс)</td></tr>
+          <tr><td>OpenCode / Open Code</td><td>открытый harness, не модель</td><td>терминал + любые провайдеры</td></tr>
+          <tr><td>Z.ai</td><td>китайский вендор GLM</td><td>GLM 5.3, GLM Coding Plan</td></tr>
+          <tr><td>Claude (Клод)</td><td>семейство моделей Anthropic</td><td>Opus, Sonnet, Haiku, Fable</td></tr>
+          <tr><td>Anthropic (Антропик)</td><td>компания: Claude и Claude Code</td><td>Claude Code</td></tr>
+          <tr><td>Google Gemini (Джемини)</td><td>семейство моделей и терминальный агент</td><td>Gemini 4 Carbon, Gemini CLI</td></tr>
+          <tr><td>Alibaba / Qwen (Qween)</td><td>компания и её модель/CLI</td><td>Qwen3.8 Max, Qwen Code</td></tr>
+          <tr><td>Kimi</td><td>ассистент и модели Moonshot</td><td>Kimi K2.7 Code</td></tr>
+          <tr><td>Alisa (Алиса)</td><td>ассистент и модели Яндекса</td><td>Alice AI LLM</td></tr>
+          <tr><td>GigaChat (Гигачат)</td><td>модели Сбера</td><td>GigaChat 2 Lite</td></tr>
+          <tr><td>MiMo (МиМо)</td><td>модели Xiaomi</td><td>MiMo-V2.6-Flash</td></tr>
+          <tr><td>DeepSeek</td><td>вендор и модель</td><td>DeepSeek V4 Pro</td></tr>
+          <tr><td>Nvidia / Nemotron</td><td>компания и модельное семейство</td><td>Nemotron 3.5 Lightning</td></tr>
+          <tr><td>Grok (Грок)</td><td>модель xAI</td><td>Grok 4.7, Grok Build 0.1</td></tr>
+          <tr><td>Cursor / Copilot</td><td>AI-редактор и расширение GitHub</td><td>Курсор, Копилот</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section class="block accent-teal">
+      <h3 class="block-title">Словарь агента</h3>
+      <table class="table">
+        <thead>
+          <tr><th>Термин</th><th>Для чего</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>model</td><td>сам LLM, «движок»</td></tr>
+          <tr><td>harness</td><td>обвязка: контекст, тулзы, права, цикл</td></tr>
+          <tr><td>agent</td><td>harness + модель + инструменты</td></tr>
+          <tr><td>AGENTS.md</td><td>правила проекта, всегда в контексте</td></tr>
+          <tr><td>skill</td><td>инструкция по шагу, грузится по description</td></tr>
+          <tr><td>plugin</td><td>пакет: skills + команды + hooks + MCP</td></tr>
+          <tr><td>MCP</td><td>стандарт подключения Jira, Figma, GitHub, БД</td></tr>
+          <tr><td>RAG</td><td>поиск по докам перед ответом</td></tr>
+          <tr><td>hook</td><td>команда до/после хода агента</td></tr>
+          <tr><td>subagent</td><td>дочерняя задача со свежим контекстом</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section class="block accent-cyan">
+      <h3 class="block-title">Клавиши: не везде одинаковы</h3>
+      <table class="table">
+        <thead>
+          <tr><th>Клавиши</th><th>Чаще всего</th><th>Важное расхождение</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><span class="kbd">Tab</span></td><td>autocomplete / принять подсказку</td><td>Claude Code ещё и комментарий к разрешению; у Qwen на Windows — режим одобрения</td></tr>
+          <tr><td><span class="kbd">Esc</span></td><td>прервать, закрыть, отклонить</td><td><span class="kbd">Esc Esc</span> — rewind/очистка черновика; у OpenCode — <code>session.interrupt</code></td></tr>
+          <tr><td><span class="kbd">Ctrl</span>/<span class="kbd">Cmd</span>+<span class="kbd">K</span></td><td>в CLI — удалить до конца строки</td><td>в Cursor — открыть AI/сайдпанель; в OpenCode можно переназначить на palette</td></tr>
+          <tr><td><span class="kbd">Ctrl</span>/<span class="kbd">Cmd</span>+<span class="kbd">I</span></td><td>с сайдпанелью в Cursor</td><td>у OpenCode — история вперёд; у Claude <span class="kbd">Ctrl+L</span> — перерисовать экран</td></tr>
+          <tr><td><span class="kbd">Ctrl</span>+<span class="kbd">Enter</span></td><td>в Claude — отправить очередь</td><td>в OpenCode/Qwen/Gemini — просто новая строка</td></tr>
+          <tr><td><span class="kbd">Shift</span>+<span class="kbd">Tab</span></td><td>сменить режим одобрения</td><td>Cursor/Gemini/Qwen; у Qwen на Windows роль у <span class="kbd">Tab</span></td></tr>
+          <tr><td><span class="kbd">/</span></td><td>меню команд и скиллов</td><td>Claude, Qwen; у OpenCode palette через <span class="kbd">Ctrl+X</span> как leader</td></tr>
+          <tr><td><span class="kbd">Ctrl</span>+<span class="kbd">X</span> → <span class="kbd">C</span></td><td>OpenCode: compact сессии</td><td>аналоги <code>/compact</code> есть не везде — сверяйте docs</td></tr>
+        </tbody>
+      </table>
+      <p class="callout callout--info">
+        <span class="callout__title">info</span>
+        Универсальных сочетаний нет: <span class="kbd">Ctrl</span> на Windows/Linux и <span class="kbd">Cmd</span> на macOS; платформа и терминал меняют поведение. Проверяйте keybinds конкретного инструмента.
+      </p>
+    </section>
+
+    <section class="block accent-green">
+      <h3 class="block-title">Экономия токенов: рабочие приёмы</h3>
+      <ul class="list list--tight">
+        <li><b>Короткий always-on:</b> AGENTS.md уходит с каждым запросом — держите его конкретным</li>
+        <li><b>Progressive disclosure:</b> модель видит только <code>name</code> и <code>description</code> скилла, полный текст — по вызову</li>
+        <li><b>План → build:</b> отдельные агенты plan/build в OpenCode, Exit Plan Mode у Qwen</li>
+        <li><b>Subagents:</b> изолируют контекст и возвращают краткий отчёт, а не целые файлы</li>
+        <li><b>Compact:</b> <code>/compact</code>, <code>&lt;leader&gt;c</code> в OpenCode; не везде есть аналог</li>
+        <li><b>Кэш:</b> стабильный префикс дешевле; у Gemini CLI кэш есть не для OAuth</li>
+        <li><b>Английский</b> обычно токенизируется эффективнее — это эвристика, не цитата из docs</li>
+        <li>Не делайте дампы репо и логов; используйте <code>grep/glob</code>, <code>@file.md</code>, <code>/skills</code></li>
+        <li>Дешёвая модель на батчи: Haiku / Luna / Flash / GLM Flash / DeepSeek Flash</li>
+        <li>Просите <code>diff</code> и патч, а не полную перепечатку файла</li>
+      </ul>
+    </section>
+
+  </div>
+
+  <footer class="sheet-footer">
+    <span>AI в веб-разработке · расширенная версия · cheat-ui</span>
+    <span class="page-number">3 / 6</span>
+  </footer>
+</div>
+
+<!-- ================= ЛИСТ 4 ================= -->
+<div class="sheet">
+
+  <div class="sheet-head accent-green">
+    <span class="sheet-number">4</span>
+    <h2 class="sheet-title">Минимум для AGENTS.md, skill и agent</h2>
+  </div>
+
+  <div class="columns">
+
+    <section class="block accent-blue">
+      <h3 class="block-title">AGENTS.md — один файл на проект</h3>
+      <pre class="code-block"><span class="tok-comment"># AGENTS.md — читают почти все агенты</span>
+<b># Stack</b>
+React 19, TypeScript strict, Vitest, pnpm
+
+<b># Commands</b>
+pnpm install · pnpm test · pnpm lint
+
+<b># Rules</b>
+- только компоненты кита, без inline-стилей
+- планировать перед правкой, ревьюить diff
+- коммит только после зелёных тестов
+
+<span class="tok-comment"># CLAUDE.md для Claude Code (импорт, без копипаста):</span>
+@AGENTS.md</pre>
+    </section>
+
+    <section class="block accent-green">
+      <h3 class="block-title">Skill: папка с SKILL.md</h3>
+      <pre class="code-block"><span class="tok-comment"># .opencode/skills/print-audit/SKILL.md</span>
+---
+name: print-audit              <span class="tok-comment"># ≤64, lowercase</span>
+description: Проверка печати A4; use when asked to audit PDF.
+---                            <span class="tok-comment"># description ≤1024</span>
+1. Открыть references/checklist.md
+2. Запустить scripts/check_print.py FILE.pdf
+3. Сообщить число страниц и проблемы
+
+<span class="tok-comment"># ID в OpenCode = имя папки, а не frontmatter name</span>
+<span class="tok-comment"># Claude: .claude/skills/&lt;id&gt;/SKILL.md</span>
+<span class="tok-comment"># Qwen: .qwen/skills/&lt;id&gt; · Codex: CODEX_HOME/skills/&lt;id&gt;</span>
+<span class="tok-comment"># Devin/Windsurf: .devin/skills/&lt;id&gt;</span>
+<span class="tok-comment"># тело &lt;5000 токенов и &lt;500 строк — рекомендация spec</span></pre>
+    </section>
+
+    <section class="block accent-violet">
+      <h3 class="block-title">Agent: дочерняя роль со своими правами</h3>
+      <pre class="code-block"><span class="tok-comment"># .opencode/agents/reviewer.md</span>
+---
+description: Ревью diff без правки файлов
+mode: subagent
+model: anthropic/claude-sonnet-5-5
+permissions:
+  - action: edit
+    resource: "*"
+    effect: deny
+---
+Review the current changes. List findings with file and line.</pre>
+    </section>
+
+    <section class="block accent-teal">
+      <h3 class="block-title">Что когда использовать</h3>
+      <ul class="list list--tight">
+        <li><b>AGENTS.md</b> — правила, которые нужны в каждой сессии</li>
+        <li><b>Skill</b> — модель выбирает сама по <code>description</code></li>
+        <li><b>Slash-команда</b> — её вызывает пользователь: <code>/review</code></li>
+        <li><b>Agent</b> — роль с моделью, правами и свежим контекстом</li>
+        <li><b>MCP</b> — внешние действия: Jira, Figma, GitHub</li>
+        <li><b>RAG</b> — внешние знания: ADR, API-доки, старые тикеты</li>
+        <li><b>Hook</b> — жёсткое действие: линтер перед коммитом</li>
+      </ul>
+    </section>
+
+    <section class="block accent-amber">
+      <p class="callout callout--warn">
+        <span class="callout__title">правило</span>
+        AGENTS.md короткий — он съедает контекст всегда. Skill ленивый — грузится только когда релевантен. Не копируйте одно и то же в оба файла.
+      </p>
+    </section>
+
+    <section class="block accent-pink">
+      <h3 class="block-title">MCP: где искать и пример</h3>
+      <ul class="list list--tight">
+        <li>Каталоги: <code>registry.modelcontextprotocol.io</code>, <code>mcpservers.org</code>, каталоги Atlassian / Figma / GitHub</li>
+        <li>Скилы: <code>github.com/anthropics/skills</code>, <code>skills.sh</code>, <code>.opencode/skills/</code></li>
+        <li><code>.mcp.json</code> хранит серверы, но не токены — токены в env</li>
+        <li>Права минимальные: read-only там, где хватает чтения</li>
+      </ul>
+    </section>
+
+  </div>
+
+  <footer class="sheet-footer">
+    <span>AI в веб-разработке · расширенная версия · cheat-ui</span>
+    <span class="page-number">4 / 6</span>
+  </footer>
+</div>
+
+<!-- ================= ЛИСТ 5 ================= -->
+<div class="sheet">
+
+  <div class="sheet-head accent-teal">
+    <span class="sheet-number">5</span>
+    <h2 class="sheet-title">Какие папки читает инструмент и как работать в команде</h2>
+  </div>
+
+  <div class="columns_">
+
+    <section class="block accent-blue">
+      <h3 class="block-title">Матрица конфигов</h3>
+      <table class="table">
+        <thead>
+          <tr><th>Инструмент</th><th>Читает</th><th>Чужие файлы?</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Claude Code</td><td><code>CLAUDE.md</code>, <code>.claude/rules/</code>, auto memory, <code>/memory</code></td><td>AGENTS.md — да, если нет CLAUDE.md; .opencode — нет</td></tr>
+          <tr><td>OpenCode</td><td><code>AGENTS.md</code> по пути к root, <code>.opencode/skills|agents|commands/</code></td><td>чужие скилы — только явными каталогами; AGENTS.md — мост</td></tr>
+          <tr><td>Codex CLI</td><td><code>AGENTS.md</code>, <code>AGENTS.override.md</code>, <code>CODEX_HOME/skills/</code></td><td>CLAUDE.md/GEMINI.md — нет подтверждения</td></tr>
+          <tr><td>Cursor</td><td><code>.cursor/rules/</code>, User/Team Rules, <code>AGENTS.md</code></td><td>правила идут в Agent, но не в Tab и не в Bugbot review</td></tr>
+          <tr><td>Copilot</td><td><code>.github/copilot-instructions.md</code>, <code>.github/instructions/*.instructions.md</code>, <code>AGENTS.md</code></td><td>да: AGENTS.md nearest wins, root CLAUDE.md/GEMINI.md как альтернатива</td></tr>
+          <tr><td>Gemini CLI</td><td><code>GEMINI.md</code>, parent/global, <code>context.fileName</code>, <code>@import</code></td><td>AGENTS.md/CONTEXT.md — если перечислены в конфиге</td></tr>
+          <tr><td>Qwen Code</td><td><code>QWEN.md</code>, <code>.qwen/rules/</code>, <code>.qwen/skills/</code></td><td>да: <code>.agents/skills/</code>, через <code>skills.directories</code> даже <code>~/.claude/skills</code></td></tr>
+          <tr><td>Windsurf / Devin</td><td><code>AGENTS.md</code>, <code>.devin/rules/</code>, legacy <code>.windsurfrules</code></td><td>да: <code>.agents/skills/</code> и legacy <code>.windsurf/skills/</code></td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section class="block accent-green">
+      <h3 class="block-title">Один использует Claude, другой OpenCode</h3>
+      <ul class="list list--tight">
+        <li>Источник правды — <code>AGENTS.md</code> в корне репозитория</li>
+        <li>Для Claude Code добавьте <code>CLAUDE.md</code> с строкой <code>@AGENTS.md</code></li>
+        <li>Скилы держите в репо: <code>.claude/skills/</code> и <code>.opencode/skills/</code></li>
+        <li><code>.agents/skills/</code> читают Qwen и Windsurf/Devin, но это не универсальный стандарт</li>
+        <li>Если нужны оба набора — синхронизируйте скриптом, не symlink на Windows</li>
+        <li>Не считайте, что один файл подхватят оба: проверяйте <code>/memory</code> и <code>/agent</code></li>
+        <li>Не полагайтесь на <code>~/.claude/</code> и <code>~/.config/opencode/</code> как на командные правила</li>
+        <li>Команды сборки и тестов — только в AGENTS.md, чтобы поведение совпадало</li>
+      </ul>
+    </section>
+
+    <section class="block accent-cyan">
+      <h3 class="block-title">Минимальная структура репо</h3>
+      <pre class="code-block">repo/
+├─ AGENTS.md              <span class="tok-comment"># общие правила</span>
+├─ CLAUDE.md              <span class="tok-comment"># @AGENTS.md + Claude-only</span>
+├─ .mcp.json              <span class="tok-comment"># Jira, Figma, GitHub</span>
+├─ .agents/skills/        <span class="tok-comment"># частично Qwen/Devin</span>
+├─ .claude/skills/        <span class="tok-comment"># Claude Code</span>
+└─ .opencode/
+   ├─ skills/
+   ├─ agents/
+   ├─ commands/</pre>
+    </section>
+
+    <section class="block accent-violet">
+      <h3 class="block-title">Проверка перед интервью</h3>
+      <ul class="list list--tight">
+        <li><code>/context all</code> в Claude Code — какие memory-файлы реально загрузились</li>
+        <li><code>/models</code> и <code>/status</code> — активный провайдер и модель</li>
+        <li>Спросите агента: «какие правила проекта ты видишь?» — сверьте с AGENTS.md</li>
+        <li>Прогоните одну маленькую задачу до большого рефактора</li>
+      </ul>
+    </section>
+
+    <section class="block accent-amber">
+      <p class="callout callout--danger">
+        <span class="callout__title">безопасность</span>
+        Токены и ключи — только в env/secret manager. Trial-модели Nvidia и часть free-моделей собирают фидбек: не отправляйте туда приватный код или чужие макеты.
+      </p>
+    </section>
+
+  </div>
+
+  <footer class="sheet-footer">
+    <span>AI в веб-разработке · расширенная версия · cheat-ui</span>
+    <span class="page-number">5 / 6</span>
+  </footer>
+</div>
+
+<!-- ================= ЛИСТ 6 ================= -->
+<div class="sheet">
+
+  <div class="sheet-head accent-orange">
+    <span class="sheet-number">6</span>
+    <h2 class="sheet-title">Workflow</h2>
+  </div>
+
+  <div class="columns">
+
+    <section class="block accent-blue">
+      <h3 class="block-title">Неизвестный проект: первый проход</h3>
+      <pre class="code-block"><span class="tok-comment">// 1. беглый осмотр без правок</span>
+README → AGENTS.md → package.json → src/
+<b>pnpm test</b> · <b>pnpm lint</b> · <b>pnpm build</b>
+
+<span class="tok-comment">// 2. зафиксировать правила для агента</span>
+/init → AGENTS.md: стек, команды, стиль, табу
+
+<span class="tok-comment">// 3. понять потоки</span>
+«Покажи 3 главных потока данных и где state»
+
+<span class="tok-comment">// 4. только потом код</span>
+маленькая задача → plan → diff → тест → коммит</pre>
+    </section>
+
+    <section class="block accent-green">
+      <h3 class="block-title">Проект с нуля</h3>
+      <pre class="code-block"><b>npm create vite@latest app -- --template react-ts</b>
+cd app &amp;&amp; npm i
+npm i -D vitest @testing-library/react
+
+<span class="tok-comment">// сразу положить AGENTS.md</span>
+# Stack: React 19, TS strict, Vitest
+# Commands: npm test / npm run lint
+# Rules: план → код → тест → diff
+
+<span class="tok-comment">// первая фича = план → build → тест → коммит</span></pre>
+    </section>
+
+    <section class="block accent-teal">
+      <p class="callout callout--info">
+        <span class="callout__title">правило</span>
+        Сначала план, потом код. Ревьюьте <code>diff</code>, а не болтовню в чате. Тест — обязательный артефакт задачи, коммит — только после зелёных проверок.
+      </p>
+    </section>
+
+    <section class="block accent-violet">
+      <h3 class="block-title">Вопросы</h3>
+      <ul class="list list--tight">
+        <li>Какие инструменты используете и почему именно они</li>
+        <li>Кто лидер по качеству инструментария и в какой задаче</li>
+        <li>Чем Claude отличается от Anthropic, а GPT от OpenAI</li>
+        <li>Как подключали модель другого провайдера, что ломалось</li>
+        <li>Что лежит в AGENTS.md и зачем отдельный skill</li>
+        <li>Какой MCP используете: Jira, Figma, GitHub — и эффект</li>
+        <li>Как считаете токены и объясняете разницу в качестве</li>
+        <li>Как гарантируете качество: plan, тесты, ревью diff</li>
+      </ul>
+    </section>
+
+    <section class="block accent-pink">
+      <h3 class="block-title">Что показать на экране</h3>
+      <ul class="list list--tight">
+        <li>Реальный репо: <code>AGENTS.md</code>, <code>CLAUDE.md</code>, <code>.mcp.json</code></li>
+        <li><code>/status</code> и <code>/models</code> — провайдер, модель, base URL</li>
+        <li>Живой цикл: план → правка → <code>pnpm test</code> → diff</li>
+        <li>Короткий skill, который реально вызывается по описанию</li>
+        <li>Не показывайте ключи, чужие тикеты и приватные макеты</li>
+      </ul>
+    </section>
+
+    <section class="block accent-amber">
+      <h3 class="block-title">Частые провалы</h3>
+      <ul class="list list--tight">
+        <li>Отдать агенту весь репо без AGENTS.md и надеяться «сам разберётся»</li>
+        <li>Принять большой diff без плана и без тестов</li>
+        <li>Сравнивать модели только по цене за токен</li>
+        <li>Хранить API-ключ в конфиге репозитория</li>
+        <li>Думать, что горячие клавиши одинаковы во всех инструментах</li>
+      </ul>
+    </section>
+
+  </div>
+
+  <footer class="sheet-footer">
+    <span>AI в веб-разработке · расширенная версия · cheat-ui</span>
+    <span class="page-number">6 / 6</span>
+  </footer>
+</div>
+
+</body>
+</html>
