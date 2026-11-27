@@ -1,9 +1,10 @@
 """Render an HTML cheatsheet to PDF and report A4 pagination diagnostics.
 
-Usage:
-    python check_print.py vitest_cheatsheet.html out.pdf
-    python check_print.py sheet.html out.pdf --png shots --theme dark
-    python check_print.py sheet.html out.pdf --expect-pages 4
+Usage from the project root:
+    python .opencode/skills/cheat-ui-print-audit/scripts/check_print.py \
+        cheatsheets/vitest_cheatsheet.html /tmp/vitest.pdf
+    python check_print.py cheatsheets/sheet.html /tmp/sheet.pdf --png shots --theme dark
+    python check_print.py cheatsheets/sheet.html /tmp/sheet.pdf --expect-pages 4
 
 Requires Chrome and PyMuPDF (import pymupdf).
 """

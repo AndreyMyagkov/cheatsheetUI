@@ -9,13 +9,16 @@ description: Проверка печати A4 шпаргалок cheat-ui — ч
 ни один блок кода/таблицы не разрезан, подвалы у нижнего края, а тёмная
 тема печатается только светлым оформлением.
 
+> Скил запускается **только по прямому запросу пользователя**. После создания
+> новой шпаргалки агент не запускает его сам, а лишь предлагает команду проверки.
+
 ## 1. Рендер и отчёт
 
 Из корня проекта запустите (`--png` — по желанию, для визуального осмотра):
 
 ```sh
 python .opencode/skills/cheat-ui-print-audit/scripts/check_print.py \
-  vitest_cheatsheet.html vitest_cheatsheet.pdf --png audit-images
+  cheatsheets/vitest_cheatsheet.html /tmp/vitest.pdf --png /tmp/audit-images
 ```
 
 Скрипт сам запускает Chrome с уникальным `--user-data-dir`, считает страницы
@@ -27,7 +30,7 @@ PyMuPDF, печатает для каждой страницы `top / L / R / fo
 
 ```sh
 python .opencode/skills/cheat-ui-print-audit/scripts/check_print.py \
-  vitest_cheatsheet.html dark.pdf --theme dark
+  cheatsheets/vitest_cheatsheet.html /tmp/vitest-dark.pdf --theme dark
 ```
 
 Ожидаемо: тот же результат по числу страниц и положению блоков; цвета
