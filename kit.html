@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>cheat-ui — витрина компонентов</title>
+<link rel="stylesheet" href="cheat-ui.css">
+<style>
+/* ------------------------------------------------------------------
+   Стили только для витрины. В сам kit они не входят.
+   ------------------------------------------------------------------ */
+.kit{ max-width: 210mm; margin: 0 auto; }
+
+.kit-head{
+  display:flex; flex-wrap:wrap; align-items:center; gap:10px;
+  margin:0 0 18px; padding:0 2px;
+}
+.kit-head h1{
+  font-size:19pt; font-weight:800; letter-spacing:.2px;
+  margin:0; color:var(--ink);
+}
+.kit-head p{ margin:0; font-size:9pt; color:var(--muted); }
+.kit-head .spacer{ flex:1 1 100%; height:0; }
+
+.demo{
+  background:var(--sheet); border-radius:6px; box-shadow:var(--shadow);
+  padding:16px 18px 18px; margin:0 0 18px;
+}
+.demo__label{
+  display:flex; align-items:center; gap:8px;
+  margin:0 0 12px; padding-bottom:6px;
+  font-size:8pt; font-weight:700; letter-spacing:.1em; text-transform:uppercase;
+  color:var(--muted); border-bottom:1px solid var(--rule);
+}
+.demo__label .tag{
+  margin-left:auto; font-size:7.4pt; letter-spacing:.02em; text-transform:none;
+  font-weight:600; color:var(--c);
+  background:var(--c-soft); border:1px solid var(--c-line);
+  border-radius:999px; padding:1px 8px;
+}
+.demo__row{ display:flex; flex-wrap:wrap; gap:8px; align-items:center; margin:0 0 10px; }
+.demo__row:last-child{ margin-bottom:0; }
+
+/* палитра */
+.swatches{ display:grid; grid-template-columns:repeat(3,1fr); gap:8px; }
+.swatch{
+  border:1px solid var(--rule); border-radius:4px; overflow:hidden;
+  font-size:7.6pt; color:var(--muted);
+}
+.swatch__cells{ display:flex; height:34px; }
+.swatch__cells span{ flex:1; }
+.swatch__cells .cell-accent{ background:var(--c); }
+.swatch__cells .cell-soft{ background:var(--c-soft); }
+.swatch__cells .cell-line{ background:var(--c-line); }
+.swatch__name{ display:flex; justify-content:space-between; gap:6px; padding:3px 6px; }
+.swatch__name b{ color:var(--ink); font-weight:700; }
+
+/* панель тем */
+.theme-bar{
+  position:fixed; right:18px; bottom:18px; z-index:50;
+  display:flex; align-items:center; gap:4px; padding:5px;
+  background:var(--sheet); border:1px solid var(--rule);
+  border-radius:999px; box-shadow:var(--shadow);
+}
+.theme-bar__caption{
+  padding:0 8px 0 6px; font-size:7.6pt; font-weight:700;
+  letter-spacing:.08em; text-transform:uppercase; color:var(--muted);
+}
+.theme-bar button{
+  appearance:none; border:0; cursor:pointer;
+  padding:4px 11px; border-radius:999px;
+  font:inherit; font-size:8pt; font-weight:600;
+  color:var(--muted); background:transparent;
+}
+.theme-bar button:hover{ background:var(--c-soft); color:var(--c); }
+.theme-bar button[aria-pressed="true"]{ background:var(--ink); color:var(--sheet); }
+
+@media screen and (max-width:820px){
+  .theme-bar{ left:12px; right:12px; bottom:12px; justify-content:center; flex-wrap:wrap; }
+  .theme-bar__caption{ display:none; }
+}
+</style>
+</head>
+<body>
+
+<div class="kit">
+
+  <header class="kit-head">
+    <h1>cheat-ui</h1>
+    <p>Мини-библиотека для печатных шпаргалок A4 · v2.0</p>
+    <span class="spacer"></span>
+    <span class="chip accent-blue">HSL-рецепт</span>
+    <span class="chip accent-green">4 темы</span>
+    <span class="chip accent-violet">print-friendly</span>
+  </header>
+
+  <!-- ============ 1. Обложка ============ -->
+  <section class="demo">
+    <div class="demo__label">Обложка <span class="tag">.cover</span></div>
+
+    <div class="cover">
+      <span class="cover__eyebrow">Шпаргалка · A4 · 4 листа</span>
+      <h2 class="cover__title">Название темы</h2>
+      <p class="cover__subtitle">Одна строка о том, что внутри: подсказки, примеры, подводные камни.</p>
+      <div class="cover__meta">
+        <span class="chip">v2.0</span>
+        <span class="chip">4 страницы</span>
+        <span class="chip">2 колонки</span>
+      </div>
+    </div>
+
+    <div class="code-block" style="margin-bottom:0"><span class="tok-comment">&lt;!-- разметка обложки --&gt;</span>
+&lt;div class="cover"&gt;
+  &lt;span class="cover__eyebrow"&gt;Шпаргалка · A4&lt;/span&gt;
+  &lt;h2 class="cover__title"&gt;Название темы&lt;/h2&gt;
+  &lt;p class="cover__subtitle"&gt;Короткое описание.&lt;/p&gt;
+  &lt;div class="cover__meta"&gt;
+    &lt;span class="chip"&gt;v2.0&lt;/span&gt;
+  &lt;/div&gt;
+&lt;/div&gt;</div>
+  </section>
+
+  <!-- ============ 2. Заголовок листа ============ -->
+  <section class="demo accent-cyan">
+    <div class="demo__label">Плашка листа <span class="tag">.sheet-head</span></div>
+
+    <div class="sheet-head accent-blue">
+      <span class="sheet-number">1</span>
+      <h2 class="sheet-title">Синий лист</h2>
+    </div>
+    <div class="sheet-head accent-green">
+      <span class="sheet-number">2</span>
+      <h2 class="sheet-title">Зелёный лист</h2>
+    </div>
+    <div class="sheet-head accent-violet">
+      <span class="sheet-number">3</span>
+      <h2 class="sheet-title">Фиолетовый лист</h2>
+    </div>
+    <div class="sheet-head accent-orange">
+      <span class="sheet-number">4</span>
+      <h2 class="sheet-title">Оранжевый лист</h2>
+    </div>
+  </section>
+
+  <!-- ============ 3. Палитра ============ -->
+  <section class="demo">
+    <div class="demo__label">Палитра: 9 оттенков × 3 варианта <span class="tag">.accent-*</span></div>
+
+    <div class="swatches">
+      <div class="swatch accent-red">
+        <div class="swatch__cells"><span class="cell-accent"></span><span class="cell-soft"></span><span class="cell-line"></span></div>
+        <div class="swatch__name"><b>red</b><span>H 358</span></div>
+      </div>
+      <div class="swatch accent-orange">
+        <div class="swatch__cells"><span class="cell-accent"></span><span class="cell-soft"></span><span class="cell-line"></span></div>
+        <div class="swatch__name"><b>orange</b><span>H 24</span></div>
+      </div>
+      <div class="swatch accent-amber">
+        <div class="swatch__cells"><span class="cell-accent"></span><span class="cell-soft"></span><span class="cell-line"></span></div>
+        <div class="swatch__name"><b>amber</b><span>H 38</span></div>
+      </div>
+      <div class="swatch accent-green">
+        <div class="swatch__cells"><span class="cell-accent"></span><span class="cell-soft"></span><span class="cell-line"></span></div>
+        <div class="swatch__name"><b>green</b><span>H 148</span></div>
+      </div>
+      <div class="swatch accent-teal">
+        <div class="swatch__cells"><span class="cell-accent"></span><span class="cell-soft"></span><span class="cell-line"></span></div>
+        <div class="swatch__name"><b>teal</b><span>H 174</span></div>
+      </div>
+      <div class="swatch accent-cyan">
+        <div class="swatch__cells"><span class="cell-accent"></span><span class="cell-soft"></span><span class="cell-line"></span></div>
+        <div class="swatch__name"><b>cyan</b><span>H 194</span></div>
+      </div>
+      <div class="swatch accent-blue">
+        <div class="swatch__cells"><span class="cell-accent"></span><span class="cell-soft"></span><span class="cell-line"></span></div>
+        <div class="swatch__name"><b>blue</b><span>H 218</span></div>
+      </div>
+      <div class="swatch accent-violet">
+        <div class="swatch__cells"><span class="cell-accent"></span><span class="cell-soft"></span><span class="cell-line"></span></div>
+        <div class="swatch__name"><b>violet</b><span>H 262</span></div>
+      </div>
+      <div class="swatch accent-pink">
+        <div class="swatch__cells"><span class="cell-accent"></span><span class="cell-soft"></span><span class="cell-line"></span></div>
+        <div class="swatch__name"><b>pink</b><span>H 330</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 4. Секция, заголовок, код ============ -->
+  <section class="demo">
+    <div class="demo__label">Секция, заголовок и код <span class="tag">.block · .block-title · .code-block</span></div>
+
+    <div class="grid-2">
+      <div class="block accent-blue" style="margin:0">
+        <h3 class="block-title">Синяя секция</h3>
+        <div class="code-block">import { describe, it, expect } from <span class="tok-string">'vitest'</span>;
+
+describe(<span class="tok-string">'корзина'</span>, () =&gt; {
+  <span class="tok-comment">// подготовка перед каждым тестом</span>
+  beforeEach(() =&gt; reset());
+
+  it(<span class="tok-string">'добавляет товар'</span>, () =&gt; {
+    expect(cart.total).toBe(<span class="tok-number">2</span>);
+  });
+});</div>
+        <ul class="list">
+          <li>Квадратный маркер в цвет секции</li>
+          <li>Инлайн-код: <code>toEqual</code>, <code>toMatch</code></li>
+          <li>Отступ и размер шрифта — как в печати</li>
+        </ul>
+      </div>
+
+      <div class="block accent-pink" style="margin:0">
+        <h3 class="block-title">Розовая секция <span class="block-title__hint">.block-title__hint</span></h3>
+        <div class="code-block"><span class="tok-keyword">const</span> user = <span class="tok-keyword">await</span> <span class="tok-function">fetchUser</span>(<span class="tok-number">1</span>);
+
+<span class="tok-comment">// ждём, пока условие станет истинным</span>
+<span class="tok-keyword">await</span> <span class="tok-builtin">vi.waitFor</span>(() =&gt; {
+  expect(el.textContent).toContain(<span class="tok-string">'Готово'</span>);
+}, { timeout: <span class="tok-number">2000</span> });</div>
+        <ul class="list list--check">
+          <li>Галочка вместо квадратика</li>
+          <li>Второй вариант маркера</li>
+          <li>Плотный список: <code>.list--tight</code></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 5. Выноски ============ -->
+  <section class="demo">
+    <div class="demo__label">Выноски <span class="tag">.callout</span></div>
+
+    <div class="grid-2">
+      <p class="callout callout--info">
+        <span class="callout__title">info</span>
+        Нейтральная подсказка: после <code>trigger</code> всегда <code>await</code>.
+      </p>
+      <p class="callout callout--ok">
+        <span class="callout__title">ok</span>
+        Хорошая практика: чистить моки в <code>afterEach</code>.
+      </p>
+      <p class="callout callout--warn">
+        <span class="callout__title">warn</span>
+        Осторожно: таймаут по умолчанию — 5000 мс.
+      </p>
+      <p class="callout callout--danger">
+        <span class="callout__title">danger</span>
+        Забытый <code>await</code> делает тест зелёным, но пустым.
+      </p>
+    </div>
+
+    <p class="callout" style="margin-bottom:0">
+      Без модификатора выноска красится в цвет секции — удобно внутри <code>.accent-teal</code>.
+    </p>
+  </section>
+
+  <!-- ============ 6. Таблица ============ -->
+  <section class="demo accent-teal">
+    <div class="demo__label">Таблица <span class="tag">.table</span></div>
+
+    <table class="table">
+      <thead>
+        <tr><th>Команда</th><th>Что делает</th><th>Когда использовать</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><code>vitest</code></td><td>watch-режим</td><td>во время разработки</td></tr>
+        <tr><td><code>vitest run</code></td><td>однократный прогон</td><td>CI, локальная проверка</td></tr>
+        <tr><td><code>vitest -t "имя"</code></td><td>фильтр по названию</td><td>один упавший тест</td></tr>
+        <tr><td><code>vitest --ui</code></td><td>визуальный интерфейс</td><td>разбор покрытия</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- ============ 7. Мелочи ============ -->
+  <section class="demo">
+    <div class="demo__label">Чипы, клавиши, утилиты <span class="tag">.chip · .kbd</span></div>
+
+    <div class="demo__row">
+      <span class="chip accent-blue">.chip</span>
+      <span class="chip accent-violet">v2.0</span>
+      <span class="chip accent-cyan">4 темы</span>
+      <span class="chip chip--ok">прошло</span>
+      <span class="chip chip--bad">упало</span>
+      <span class="chip accent-amber">H 38</span>
+    </div>
+
+    <div class="demo__row">
+      <span class="text-muted">Хоткей:</span>
+      <span class="kbd">Ctrl</span> + <span class="kbd">Shift</span> + <span class="kbd">P</span>
+      <span class="text-muted">·</span>
+      <span class="text-small text-muted">.text-small .text-muted</span>
+    </div>
+
+    <div class="grid-3">
+      <div class="callout callout--info" style="margin:0">Сетка <code>.grid-3</code></div>
+      <div class="callout callout--ok" style="margin:0">для карточек</div>
+      <div class="callout callout--warn" style="margin:0">и сравнений</div>
+    </div>
+  </section>
+
+  <!-- ============ 8. Готовый лист A4 ============ -->
+  <section class="demo" style="padding:0; background:transparent; box-shadow:none;">
+    <div class="demo__label" style="padding:0 2px;">Готовый лист A4 <span class="tag">Ctrl+P — проверить печать</span></div>
+
+    <div class="sheet">
+      <div class="sheet-head accent-teal">
+        <span class="sheet-number">1</span>
+        <h2 class="sheet-title">Пример листа</h2>
+      </div>
+
+      <div class="columns">
+        <section class="block accent-blue">
+          <h3 class="block-title">Запуск</h3>
+          <div class="code-block">npm i -D vitest
+<b>vitest</b>        <span class="tok-comment"># watch</span>
+<b>vitest run</b>    <span class="tok-comment"># один прогон</span></div>
+          <p class="callout callout--info" style="margin-bottom:0">
+            <span class="callout__title">info</span>
+            Печать: заливки поднимаются до 98.5% светлоты.
+          </p>
+        </section>
+
+        <section class="block accent-amber">
+          <h3 class="block-title">Контраст</h3>
+          <ul class="list">
+            <li>Жёлтый и циан светлее синего при том же L.</li>
+            <li>Поэтому у них есть <code>--l-shift</code>.</li>
+            <li>Темы меняют только рецепт S/L.</li>
+          </ul>
+        </section>
+
+        <section class="block accent-pink">
+          <h3 class="block-title">Темы</h3>
+          <table class="table" style="margin-bottom:0">
+            <thead><tr><th>Тема</th><th>Вид</th></tr></thead>
+            <tbody>
+              <tr><td><code>paper</code></td><td>пастель</td></tr>
+              <tr><td><code>vivid</code></td><td>яркая</td></tr>
+              <tr><td><code>muted</code></td><td>строгая</td></tr>
+              <tr><td><code>dark</code></td><td>инверсия</td></tr>
+            </tbody>
+          </table>
+        </section>
+
+        <section class="block accent-cyan">
+          <h3 class="block-title">Матчеры</h3>
+          <ul class="list">
+            <li><code>toBe</code> — строгая равность</li>
+            <li><code>toEqual</code> — глубокая структура</li>
+            <li><code>toContain</code> — вхождение</li>
+            <li><code>toThrow</code> — ожидание ошибки</li>
+            <li><code>expect.soft</code> — не рвёт тест</li>
+          </ul>
+        </section>
+
+        <section class="block accent-violet">
+          <h3 class="block-title">Таймеры</h3>
+          <div class="code-block"><b>vi.useFakeTimers</b>();
+vi.setSystemTime(<span class="tok-keyword">new</span> <span class="tok-builtin">Date</span>(<span class="tok-string">'2026-01-01'</span>));
+vi.advanceTimersByTime(<span class="tok-number">1000</span>);
+vi.useRealTimers();</div>
+        </section>
+
+        <section class="block accent-orange">
+          <h3 class="block-title">Печать</h3>
+          <p class="callout callout--warn">
+            <span class="callout__title">warn</span>
+            Включите «Фон и изображения» в диалоге печати.
+          </p>
+        </section>
+      </div>
+
+      <footer class="sheet-footer">
+        <span>cheat-ui · пример листа</span>
+        <span class="page-number">1 / 1</span>
+      </footer>
+    </div>
+  </section>
+
+</div>
+
+<!-- ============ переключатель тем ============ -->
+<div class="theme-bar" role="group" aria-label="Тема оформления">
+  <span class="theme-bar__caption">Тема</span>
+  <button type="button" data-set="paper">paper</button>
+  <button type="button" data-set="vivid">vivid</button>
+  <button type="button" data-set="muted">muted</button>
+  <button type="button" data-set="dark">dark</button>
+</div>
+
+<script>
+(function () {
+  var root = document.documentElement;
+  var buttons = Array.prototype.slice.call(
+    document.querySelectorAll('.theme-bar [data-set]')
+  );
+
+  function apply(theme) {
+    if (theme === 'paper') root.removeAttribute('data-theme');
+    else root.setAttribute('data-theme', theme);
+
+    buttons.forEach(function (b) {
+      b.setAttribute('aria-pressed', String(b.dataset.set === theme));
+    });
+
+    try { localStorage.setItem('cheat-ui-theme', theme); } catch (e) {}
+  }
+
+  buttons.forEach(function (b) {
+    b.addEventListener('click', function () { apply(b.dataset.set); });
+  });
+
+  var saved = 'paper';
+  try { saved = localStorage.getItem('cheat-ui-theme') || 'paper'; } catch (e) {}
+
+  var fromUrl = '';
+  try { fromUrl = new URLSearchParams(location.search).get('theme') || ''; } catch (e) {}
+
+  apply(fromUrl || saved);
+})();
+</script>
+
+</body>
+</html>

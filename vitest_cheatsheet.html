@@ -1,0 +1,489 @@
+﻿<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<title>Vitest — шпаргалка · cheat-ui</title>
+<link rel="stylesheet" href="cheat-ui.css">
+</head>
+<body>
+
+<!-- ================= ЛИСТ 1 ================= -->
+<div class="sheet sheet--cover">
+
+  <div class="cover">
+    <span class="cover__eyebrow">Шпаргалка · A4 · 4 листа</span>
+    <h1 class="cover__title">Vitest</h1>
+    <p class="cover__subtitle">Установка, каркас теста, матчеры, асинхронность, моки, Vue и React</p>
+    <div class="cover__meta">
+      <span class="chip">v2.0</span>
+      <span class="chip">cheat-ui</span>
+      <span class="chip">печать A4</span>
+    </div>
+  </div>
+
+  <div class="columns">
+
+    <section class="block accent-blue">
+      <h3 class="block-title">Установка и запуск</h3>
+      <pre class="code-block">npm i -D vitest
+<b>vitest</b><span class="tok-comment">               # watch-режим</span>
+<b>vitest run</b><span class="tok-comment">           # однократный прогон (CI)</span>
+<b>vitest -t</b> "название"<span class="tok-comment"> # только совпавшие тесты</span>
+<b>vitest run --coverage</b>
+<b>vitest --ui</b><span class="tok-comment">          # визуальный интерфейс</span></pre>
+    </section>
+
+    <section class="block accent-cyan">
+      <h3 class="block-title">Каркас теста</h3>
+      <pre class="code-block">import { describe, it, expect } from <span class="tok-string">'vitest'</span>;
+
+describe(<span class="tok-string">'корзина'</span>, () =&gt; {
+  <b>beforeAll</b>(() =&gt; {});<span class="tok-comment">   // один раз перед всеми</span>
+  <b>beforeEach</b>(() =&gt; {});<span class="tok-comment">  // перед каждым it</span>
+  <b>afterEach</b>(() =&gt; {});<span class="tok-comment">   // после каждого</span>
+  <b>afterAll</b>(() =&gt; {});<span class="tok-comment">    // один раз в конце</span>
+
+  it(<span class="tok-string">'добавляет товар'</span>, () =&gt; {
+    expect(1 + 1).toBe(2);
+  });
+
+  it.skip(<span class="tok-string">'позже'</span>);<span class="tok-comment">        // пропустить</span>
+  it.only(<span class="tok-string">'только этот'</span>);<span class="tok-comment">  // изолировать</span>
+  it.todo(<span class="tok-string">'сделать потом'</span>);
+});</pre>
+      <p class="callout callout--info">
+        <span class="callout__title">info</span>
+        <code>it.each([...])</code> / <code>test.each</code> — параметризованные прогоны: таблица значений с <code>%s</code> в имени.
+      </p>
+    </section>
+
+    <section class="block accent-green">
+      <h3 class="block-title">Матчеры expect</h3>
+      <ul class="list">
+        <li><code>toBe(x)</code> — строгая равность (===); <code>toEqual</code> — глубокая структура</li>
+        <li><code>toStrictEqual</code> — глубоко + учёт классов и undefined-полей</li>
+        <li><code>toBeTruthy / toBeFalsy / toBeNull / toBeUndefined</code></li>
+        <li><code>toContain</code> — вхождение; <code>toContainEqual</code> — объект в массиве</li>
+        <li><code>toHaveLength, toMatch / toMatchObject</code> — регэксп / частичная структура</li>
+        <li><code>toBeGreaterThan / -ThanOrEqual / toBeCloseTo(x, 2)</code> — числа</li>
+        <li><code>toThrow('текст') / toThrowError</code> — ожидание исключения</li>
+        <li><code>expect(fn).toHaveBeen…</code> — см. раздел про моки</li>
+        <li><code>expect.soft(x)</code> — не прерывает тест при провале, собирает все ошибки</li>
+        <li><code>expect(actual).toMatchInlineSnapshot()</code> — снапшот прямо в коде</li>
+      </ul>
+    </section>
+
+    <section class="block accent-teal">
+      <h3 class="block-title">Асимметричные матчеры</h3>
+      <p class="text-small" style="margin:0 0 4px">Для гибких проверок внутри <code>toEqual</code> / <code>objectContaining</code>:</p>
+      <pre class="code-block">expect(obj).toEqual({
+  id: <b>expect.any</b>(Number),
+  at: <b>expect.any</b>(Date),
+  tags: <b>expect.arrayContaining</b>([<span class="tok-string">'a'</span>]),
+  user: <b>expect.objectContaining</b>({ name: <span class="tok-string">'Иван'</span> }),
+  note: <b>expect.stringMatching</b>(/^OK/),
+  del: <b>expect.toBeTruthy</b>()
+});</pre>
+    </section>
+
+    <section class="block accent-violet">
+      <h3 class="block-title">Асинхронность: базовые стили</h3>
+      <pre class="code-block"><span class="tok-comment">// 1. async-функция теста</span>
+it(<span class="tok-string">'грузит пользователя'</span>, async () =&gt; {
+  const u = await fetchUser(1);
+  expect(u.name).toBe(<span class="tok-string">'Анна'</span>);
+});
+
+<span class="tok-comment">// 2. промис возвращает expect</span>
+await expect(fetchUser(-1)).<b>rejects</b>.toThrow(<span class="tok-string">'нет id'</span>);
+await expect(loadConfig()).<b>resolves</b>.toEqual({...});
+
+<span class="tok-comment">// 3. свой таймаут (мс) и ретраи</span>
+it(<span class="tok-string">'медленный запрос'</span>, async () =&gt; {
+  ...
+}, <b>10_000</b>);
+<span class="tok-comment">// .retries(2) — на describe/уровне конфига</span></pre>
+      <p class="callout callout--warn">
+        <span class="callout__title">warn</span>
+        Таймаут по умолчанию 5000 мс. Unhandled rejection в тесте валит тест — не глотайте ошибки молча.
+      </p>
+    </section>
+
+    <section class="block accent-pink">
+      <h3 class="block-title">Ожидание «события»: waitFor / poll</h3>
+      <pre class="code-block"><span class="tok-comment">// ждём, пока условие станет истинным</span>
+await <b>vi.waitFor</b>(async () =&gt; {
+  expect(el.textContent).toContain(<span class="tok-string">'Готово'</span>);
+}, { timeout: 2000, interval: 50 });
+
+<span class="tok-comment">// ждём значение (не assertion):</span>
+const cfg = await <b>vi.waitUntil</b>(() =&gt; getConfig());
+
+<span class="tok-comment">// опрос значения с матчером:</span>
+await <b>expect.poll</b>(() =&gt; store.count,
+  { timeout: 1000 }).toBe(3);</pre>
+    </section>
+
+    <section class="block accent-amber">
+      <h3 class="block-title">Скорость и порядок</h3>
+      <ul class="list">
+        <li><code>describe.concurrent</code> — тесты внутри гоняются параллельно</li>
+        <li><code>describe.sequential</code> — строго по очереди (когда есть shared state)</li>
+        <li><code>describe.skipIf(cond)</code> / <code>runIf</code> — условные блоки</li>
+        <li>Файлы в Vitest всегда параллельны воркерам; состояние — на каждый файл своё</li>
+      </ul>
+    </section>
+
+  </div>
+
+  <footer class="sheet-footer">
+    <span>Vitest · cheat-ui v2.0</span>
+    <span class="page-number">1 / 4</span>
+  </footer>
+</div>
+
+<!-- ================= ЛИСТ 2 ================= -->
+<div class="sheet">
+
+  <div class="sheet-head accent-green">
+    <span class="sheet-number">2</span>
+    <h2 class="sheet-title">Моки, шпионы, стабы</h2>
+  </div>
+
+  <div class="columns">
+
+    <section class="block accent-green">
+      <h3 class="block-title">Мок-функция: vi.fn()</h3>
+      <pre class="code-block">import { vi } from <span class="tok-string">'vitest'</span>;
+const fn = <b>vi.fn</b>((x) =&gt; x * 2);
+
+fn.mockReturnValueOnce(42);<span class="tok-comment">       // один раз</span>
+fn.mockReturnValue(0);<span class="tok-comment">            // всегда</span>
+fn.mockResolvedValue({ ok: true });// Promise
+fn.mockRejectedValue(new Error(<span class="tok-string">'e'</span>));
+
+expect(fn).<b>toHaveBeenCalledWith</b>(2);
+expect(fn).<b>toHaveBeenCalledTimes</b>(3);
+expect(fn).<b>toHaveBeenNthCalledWith</b>(1, 1);
+expect(fn).<b>toHaveReturnedWith</b>(4);
+
+fn.mock.calls;<span class="tok-comment">      // все вызовы: [[arg],...]</span>
+fn.mock.results;<span class="tok-comment">    // результаты вызовов</span>
+fn.mockClear();<span class="tok-comment">     // стереть вызовы</span>
+fn.mockReset();<span class="tok-comment">     // + сброс реализации</span>
+fn.mockRestore();<span class="tok-comment">   // + вернуть оригинал (для spy)</span></pre>
+    </section>
+
+    <section class="block accent-teal">
+      <h3 class="block-title">Шпион: vi.spyOn</h3>
+      <pre class="code-block"><span class="tok-comment">// по умолчанию — оригинал работает, вызовы пишутся</span>
+const spy = <b>vi.spyOn</b>(console, <span class="tok-string">'log'</span>);
+doStuff();
+expect(spy).toHaveBeenCalled();
+
+<span class="tok-comment">// перехватить реализацию:</span>
+spy.mockImplementation(() =&gt; <span class="tok-string">'stub'</span>);
+spy.mockReturnValueOnce(<span class="tok-string">'x'</span>);
+
+<span class="tok-comment">// вернуть как было (в afterEach!):</span>
+spy.<b>mockRestore</b>();</pre>
+      <p class="callout callout--info">
+        <span class="callout__title">info</span>
+        После <code>mockRestore</code> spy снова прозрачен; для <code>vi.fn()</code> restore не имеет смысла — хватает reset.
+      </p>
+    </section>
+
+    <section class="block accent-cyan">
+      <h3 class="block-title">Подмена модуля: vi.mock</h3>
+      <pre class="code-block"><span class="tok-comment">// vi.mock поднимается (hoisting) ВЫШЕ импортов —</span>
+<span class="tok-comment">// пишем его до использования:</span>
+<b>vi.mock</b>(<span class="tok-string">'./api'</span>, () =&gt; ({
+  getUser: <b>vi.fn</b>().mockResolvedValue({ name: <span class="tok-string">'Анна'</span> })
+}));
+
+<span class="tok-comment">// частичный мок — остальное реальное:</span>
+vi.mock(<span class="tok-string">'./api'</span>, async (importOriginal) =&gt; ({
+  ...await importOriginal(),
+  getUser: vi.fn()
+}));
+
+<span class="tok-comment">// с фабрикой и доступом к моку:</span>
+import { getUser } from <span class="tok-string">'./api'</span>;
+vi.mocked(getUser).mockResolvedValue(...);
+
+<span class="tok-comment">// поздняя подмена в конкретном тесте:</span>
+<b>vi.doMock</b>(<span class="tok-string">'./api'</span>, () =&gt; ({ ... }));
+const { getUser } = await import(<span class="tok-string">'./api'</span>);</pre>
+      <p class="callout callout--info">
+        <span class="callout__title">info</span>
+        Папка <code>__mocks__/</code> рядом с модулем + <code>vi.mock('./api')</code> без фабрики — автоматический мок.
+      </p>
+    </section>
+
+    <section class="block accent-amber">
+      <h3 class="block-title">Стабы окружения и таймеров</h3>
+      <pre class="code-block"><b>vi.stubGlobal</b>(<span class="tok-string">'fetch'</span>, vi.fn());<span class="tok-comment">   // подмена globalThis.fetch</span>
+vi.unstubAllGlobals();<span class="tok-comment">             // вернуть</span>
+
+<b>vi.stubEnv</b>(<span class="tok-string">'NODE_ENV'</span>, <span class="tok-string">'test'</span>);<span class="tok-comment">   // переменные окружения</span>
+vi.unstubAllEnvs();
+
+<b>vi.useFakeTimers</b>();<span class="tok-comment">               // заморозить время</span>
+vi.setSystemTime(new Date(<span class="tok-string">'2026-01-01'</span>));
+vi.advanceTimersByTime(1000);<span class="tok-comment">      // продвинуть синхронно</span>
+await vi.advanceTimersByTimeAsync(1000);<span class="tok-comment"> // + микротаски</span>
+vi.runAllTimersAsync();<span class="tok-comment">            // дожать все таймеры</span>
+vi.useRealTimers();<span class="tok-comment">                // вернуть</span></pre>
+    </section>
+
+    <section class="block accent-blue">
+      <h3 class="block-title">API и сеть: fetch под контролем</h3>
+      <pre class="code-block"><span class="tok-comment">// мок глобального fetch с Response:</span>
+const fetchMock = vi.fn()
+  .mockResolvedValue(<b>new Response</b>(
+    JSON.stringify({ ok: true }),
+    { status: 200, headers: {<span class="tok-string">'Content-Type'</span>:<span class="tok-string">'application/json'</span>} }));
+vi.stubGlobal(<span class="tok-string">'fetch'</span>, fetchMock);
+
+await loadData();
+expect(fetchMock).toHaveBeenCalledWith(<span class="tok-string">'/api/data'</span>, expect.anything());
+
+<span class="tok-comment">// ошибка сети (reject):</span>
+fetchMock.mockRejectedValue(new TypeError(<span class="tok-string">'Failed to fetch'</span>));
+<span class="tok-comment">// HTTP 500:</span>
+fetchMock.mockResolvedValue(new Response(<span class="tok-string">'{}'</span>, { status: 500 }));</pre>
+      <p class="text-small" style="margin:0 0 4px"><b>Альтернатива — MSW</b> (перехват на уровне сети):</p>
+      <pre class="code-block">import { setupServer } from <span class="tok-string">'msw/node'</span>;
+import { http, HttpResponse } from <span class="tok-string">'msw'</span>;
+
+const server = setupServer(
+  http.get(<span class="tok-string">'/api/user'</span>, () =&gt;
+    HttpResponse.json({ name: <span class="tok-string">'Анна'</span> }))
+);
+beforeAll(() =&gt; server.<b>listen</b>());
+afterEach(() =&gt; server.<b>resetHandlers</b>());
+afterAll(() =&gt; server.<b>close</b>());</pre>
+    </section>
+
+    <section class="block accent-red">
+      <h3 class="block-title">Частые ошибки</h3>
+      <ul class="list">
+        <li>Мок «протекает» между тестами — чистите в <code>afterEach</code>: <code>vi.restoreAllMocks()</code>, <code>vi.unstubAllGlobals()</code></li>
+        <li>Забытый <code>await</code> — тест зелёный, а ассерты не выполнились</li>
+        <li><code>vi.mock</code> после импорта модуля не сработает — hoisting поднимет его, но фабрика уже должна быть самодостаточной (не тащить внешние <code>let</code>)</li>
+        <li>Fake timers + async-код: продвигайте время асинхронно (<code>advanceTimersByTimeAsync</code>), иначе промисы не успеют</li>
+        <li>Мок axios как модуля — не забудьте мокнуть конкретный метод (<code>get</code>), а не весь объект</li>
+      </ul>
+    </section>
+
+  </div>
+
+  <footer class="sheet-footer">
+    <span>Vitest · cheat-ui v2.0</span>
+    <span class="page-number">2 / 4</span>
+  </footer>
+</div>
+
+<!-- ================= ЛИСТ 3 ================= -->
+<div class="sheet">
+
+  <div class="sheet-head accent-violet">
+    <span class="sheet-number">3</span>
+    <h2 class="sheet-title">Vue · @vue/test-utils</h2>
+  </div>
+
+  <div class="columns">
+
+    <section class="block accent-violet">
+      <h3 class="block-title">Монтирование и опции</h3>
+      <pre class="code-block">import { mount, shallowMount } from <span class="tok-string">'@vue/test-utils'</span>;
+
+const wrapper = <b>mount</b>(Counter, {
+  props: { initial: 5 },
+  global: {
+    <b>stubs</b>: { RouterLink: true, teleport: true },
+    <b>provide</b>: { theme: <span class="tok-string">'dark'</span> },
+    <b>plugins</b>: [createTestingPinia()],
+    components: { MyIcon }
+  }
+});
+wrapper.unmount();</pre>
+      <ul class="list">
+        <li><code>shallowMount</code> — дочерние компоненты заменяются заглушками</li>
+        <li><code>createTestingPinia()</code> — тестовый стор: <code>@pinia/testing</code></li>
+        <li>Стор с реальной логикой: <code>setActivePinia(createPinia())</code></li>
+      </ul>
+    </section>
+
+    <section class="block accent-pink">
+      <h3 class="block-title">Поиск и значения</h3>
+      <pre class="code-block">wrapper.<b>find</b>(<span class="tok-string">'[data-test="btn"]'</span>);<span class="tok-comment">   // нет элемента → вернёт null</span>
+wrapper.<b>get</b>(<span class="tok-string">'input'</span>);<span class="tok-comment">                // кинет ошибку, если нет</span>
+wrapper.findAll(<span class="tok-string">'.item'</span>);<span class="tok-comment">            // массив</span>
+
+await input.<b>setValue</b>(<span class="tok-string">'привет'</span>);<span class="tok-comment">      // v-model / input</span>
+await wrapper.<b>setProps</b>({ title: <span class="tok-string">'x'</span> });
+await btn.<b>trigger</b>(<span class="tok-string">'click'</span>);
+await btn.trigger(<span class="tok-string">'submit'</span>);<span class="tok-comment">         // .prevent не нужен: событие на форме</span></pre>
+      <p class="callout callout--warn">
+        <span class="callout__title">warn</span>
+        После trigger/setValue всегда await: DOM и обновления Vue асинхронны. Для nextTick-подобного ожидания — <code>flushPromises()</code>.
+      </p>
+    </section>
+
+    <section class="block accent-cyan">
+      <h3 class="block-title">События и содержимое</h3>
+      <pre class="code-block">expect(btn.<b>emitted</b>(<span class="tok-string">'click'</span>)).toBeTruthy();
+expect(wrapper.emitted(<span class="tok-string">'save'</span>)![0])
+  .toEqual([{ title: <span class="tok-string">'x'</span> }]);
+expect(wrapper.<b>text</b>()).toContain(<span class="tok-string">'Готово'</span>);
+expect(btn.attributes(<span class="tok-string">'disabled'</span>)).toBeDefined();
+expect(wrapper.<b>html</b>()).toMatchInlineSnapshot();</pre>
+    </section>
+
+    <section class="block accent-teal">
+      <h3 class="block-title">Мок композабла / модуля</h3>
+      <pre class="code-block"><b>vi.mock</b>(<span class="tok-string">'@/composables/useAuth'</span>, () =&gt; ({
+  useAuth: () =&gt; ({ user: { name: <span class="tok-string">'Анна'</span> },
+                   logout: vi.fn() })
+}));</pre>
+    </section>
+
+    <section class="block accent-amber">
+      <h3 class="block-title">Асинхронные действия стора</h3>
+      <pre class="code-block">import { flushPromises } from <span class="tok-string">'@vue/test-utils'</span>;
+
+await store.fetchItems();<span class="tok-comment">     // pinia-экшен</span>
+await <b>flushPromises</b>();<span class="tok-comment">        // дожать микротаски</span>
+expect(wrapper.findAll(<span class="tok-string">'.row'</span>)).toHaveLength(3);</pre>
+    </section>
+
+    <section class="block accent-blue">
+      <h3 class="block-title">vitest.config.ts</h3>
+      <pre class="code-block">import { defineConfig } from <span class="tok-string">'vitest/config'</span>;
+
+export default defineConfig({
+  test: {
+    <b>environment</b>: <span class="tok-string">'jsdom'</span>,<span class="tok-comment">      // node | happy-dom</span>
+    <b>setupFiles</b>: [<span class="tok-string">'./tests/setup.ts'</span>],
+    <b>globals</b>: true,<span class="tok-comment">             // describe без импорта</span>
+    <b>include</b>: [<span class="tok-string">'tests/**/*.test.ts'</span>],
+    <b>coverage</b>: { provider: <span class="tok-string">'v8'</span> }
+  }
+});</pre>
+    </section>
+
+  </div>
+
+  <footer class="sheet-footer">
+    <span>Vitest · cheat-ui v2.0</span>
+    <span class="page-number">3 / 4</span>
+  </footer>
+</div>
+
+<!-- ================= ЛИСТ 4 ================= -->
+<div class="sheet">
+
+  <div class="sheet-head accent-orange">
+    <span class="sheet-number">4</span>
+    <h2 class="sheet-title">React · Testing Library</h2>
+  </div>
+
+  <div class="columns">
+
+    <section class="block accent-orange">
+      <h3 class="block-title">Рендер и запросы</h3>
+      <pre class="code-block">import { render, screen } from <span class="tok-string">'@testing-library/react'</span>;
+import userEvent from <span class="tok-string">'@testing-library/user-event'</span>;
+
+const user = userEvent.<b>setup</b>();
+const { rerender, unmount } = <b>render</b>(&lt;Form /&gt;);
+
+<span class="tok-comment">// приоритет запросов (по доступности a11y):</span>
+screen.<b>getByRole</b>(<span class="tok-string">'button'</span>, { name: /отправить/i });
+screen.getByLabelText(<span class="tok-string">'Email'</span>);
+screen.getByText(<span class="tok-string">'Готово'</span>);
+
+<span class="tok-comment">// нет элемента?  getBy → ошибка | queryBy → null</span>
+expect(screen.queryByRole(<span class="tok-string">'alert'</span>)).toBeNull();
+<span class="tok-comment">// появление позже (async):</span>
+await screen.<b>findByRole</b>(<span class="tok-string">'dialog'</span>);
+await screen.findByText(<span class="tok-string">'Загружено'</span>);</pre>
+      <p class="callout callout--info">
+        <span class="callout__title">info</span>
+        <code>getBy*</code> — элемент обязан быть; <code>queryBy*</code> — проверяем отсутствие; <code>findBy*</code> — ждём асинхронно (внутри <code>waitFor</code>).
+      </p>
+    </section>
+
+    <section class="block accent-amber">
+      <h3 class="block-title">Взаимодействие: userEvent vs fireEvent</h3>
+      <pre class="code-block"><span class="tok-comment">// userEvent — реалистичная модель (рекомендуется):</span>
+await user.click(screen.getByRole(<span class="tok-string">'button'</span>));
+await user.type(screen.getByLabelText(<span class="tok-string">'Имя'</span>), <span class="tok-string">'Иван'</span>);
+await user.selectOptions(getByRole(<span class="tok-string">'combobox'</span>), <span class="tok-string">'2'</span>);
+
+<span class="tok-comment">// fireEvent — низкий уровень, точечно:</span>
+import { fireEvent } from <span class="tok-string">'@testing-library/react'</span>;
+fireEvent.change(input, { target: { value: <span class="tok-string">'x'</span> } });</pre>
+    </section>
+
+    <section class="block accent-pink">
+      <h3 class="block-title">Матчеры jest-dom</h3>
+      <pre class="code-block">import <span class="tok-string">'@testing-library/jest-dom/vitest'</span>;
+
+expect(btn).toBeDisabled();
+expect(input).toHaveValue(<span class="tok-string">'Иван'</span>);
+expect(el).toBeInTheDocument();
+expect(dialog).toHaveAttribute(<span class="tok-string">'aria-modal'</span>, <span class="tok-string">'true'</span>);
+expect(btn).toHaveTextContent(<span class="tok-string">'Отправить'</span>);
+expect(el).toHaveClass(<span class="tok-string">'btn'</span>, <span class="tok-string">'btn--lg'</span>);</pre>
+    </section>
+
+    <section class="block accent-cyan">
+      <h3 class="block-title">Ререндер и провайдеры</h3>
+      <pre class="code-block">rerender(&lt;Form initial="новое" /&gt;);
+
+<span class="tok-comment">// обёртка-провайдер для стора/роутера:</span>
+render(&lt;Page /&gt;, {
+  wrapper: ({ children }) =&gt;
+    &lt;ThemeProvider&gt;{children}&lt;/ThemeProvider&gt;
+});</pre>
+    </section>
+
+    <section class="block accent-green">
+      <h3 class="block-title">Моки в React-тестах</h3>
+      <pre class="code-block"><span class="tok-comment">// модуль:</span>
+vi.mock(<span class="tok-string">'../api'</span>, () =&gt; ({
+  fetchUser: vi.fn().mockResolvedValue({ name: <span class="tok-string">'Анна'</span> })
+}));
+
+<span class="tok-comment">// сам компонент-заглушка:</span>
+vi.mock(<span class="tok-string">'./Chart'</span>, () =&gt; ({
+  Chart: () =&gt; &lt;div data-testid="chart-stub" /&gt;
+}));
+
+<span class="tok-comment">// fetch внутри компонента — как на листе 2:</span>
+vi.stubGlobal(<span class="tok-string">'fetch'</span>, vi.fn().mockResolvedValue(
+  new Response(<span class="tok-string">'[1,2]'</span>, { status: 200 })));</pre>
+    </section>
+
+    <section class="block accent-red">
+      <h3 class="block-title">Подводные камни</h3>
+      <ul class="list">
+        <li>act-предупреждения: апдейты после await — оборачивайте в <code>await waitFor(...)</code></li>
+        <li>Не тестируйте внутренности (state) — тестируйте то, что видит пользователь</li>
+        <li><code>vi.clearAllMocks()</code> в <code>afterEach</code> — иначе вызовы копятся между тестами</li>
+        <li><code>userEvent.setup()</code> один раз в тесте, а не в beforeEach без переустановки</li>
+      </ul>
+    </section>
+
+  </div>
+
+  <footer class="sheet-footer">
+    <span>Vitest · cheat-ui v2.0</span>
+    <span class="page-number">4 / 4</span>
+  </footer>
+</div>
+
+</body>
+</html>

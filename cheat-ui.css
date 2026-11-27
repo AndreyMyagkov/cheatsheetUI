@@ -1,0 +1,720 @@
+/* ==========================================================================
+   cheat-ui.css — мини-библиотека оформления шпаргалок A4
+   --------------------------------------------------------------------------
+   Идея: цвет = оттенок H + общий рецепт S/L.
+     • на экране рецепт даёт насыщенные тонировки;
+     • в печати меняются только L (и немного S) → заливки почти белые;
+     • темы (paper / vivid / muted / dark) меняют только рецепт и поверхность.
+   Геометрия от темы не зависит, поэтому пагинация A4 не «гуляет».
+
+   Слои (важен порядок):
+     cheat.tokens     — переменные и палитра
+     cheat.base       — сброс и страница
+     cheat.components — компоненты
+     cheat.themes     — темы (перебивают токены)
+     cheat.print      — печать (перебивает темы)
+
+   Быстрый старт:
+     <link rel="stylesheet" href="cheat-ui.css">
+     <div class="sheet">
+       <header class="cover"> … </header>
+       <div class="columns">
+         <section class="block accent-blue">
+           <h3 class="block-title">Заголовок</h3>
+           <pre class="code-block">…</pre>
+         </section>
+       </div>
+     </div>
+   ========================================================================== */
+
+@layer cheat.tokens, cheat.base, cheat.components, cheat.themes, cheat.print;
+
+/* ==========================================================================
+   1. ТОКЕНЫ
+   ========================================================================== */
+@layer cheat.tokens {
+
+  :root {
+    color-scheme: light;
+
+    /* ── поверхность ───────────────────────────────────────────────────── */
+    --page:        #eef1f6;
+    --sheet:       #ffffff;
+    --ink:         #0f172a;
+    --muted:       #475467;
+    --rule:        #dbe2ec;
+    --code-bg:     #f8fafc;
+    --code-ink:    #1d2433;
+    --zebra:       #fafbfd;
+    --shadow:      0 1px 2px hsl(218 30% 20% / .06),
+                   0 18px 40px -14px hsl(218 40% 20% / .28);
+    --glow-1:      hsl(218 80% 90% / .55);
+    --glow-2:      hsl(262 80% 90% / .45);
+
+    /* ── рецепт акцента: один на все цвета ─────────────────────────────── */
+    --accent-s:    85%;   /* насыщенность акцента (текст, маркеры, линии) */
+    --accent-l:    42%;   /* светлота акцента */
+    --soft-s:      85%;   /* насыщенность заливки */
+    --soft-l:      94%;   /* светлота заливки — печать поднимает до 98.5% */
+    --line-s:      65%;   /* насыщенность линий/рамок */
+    --line-l:      85%;   /* светлота линий/рамок */
+
+    /* ── обложка ───────────────────────────────────────────────────────── */
+    --cover-h1:    218;
+    --cover-h2:    262;
+    --cover-l:     44%;
+    --cover-ink:   #ffffff;
+    --cover-sub:   hsl(218 60% 94% / .92);
+    --cover-from:  hsl(var(--cover-h1) 85% var(--cover-l));
+    --cover-to:    hsl(var(--cover-h2) 85% calc(var(--cover-l) - 3%));
+
+    /* ── оттенки: единственное, что отличает цвета ─────────────────────── */
+    --h-red:    358;
+    --h-orange:  24;
+    --h-amber:   38;
+    --h-green:  148;
+    --h-teal:   174;
+    --h-cyan:   194;
+    --h-blue:   218;
+    --h-violet: 262;
+    --h-pink:   330;
+
+    /* ── палитра: 9 цветов × 3 варианта ────────────────────────────────
+       Варианты считаются из рецепта, поэтому темы и печать
+       переопределяют только --accent-l / --soft-l / --line-l.            */
+    --red:       hsl(var(--h-red)    var(--accent-s) var(--accent-l));
+    --red-soft:  hsl(var(--h-red)    var(--soft-s)   var(--soft-l));
+    --red-line:  hsl(var(--h-red)    var(--line-s)   var(--line-l));
+
+    --orange:      hsl(var(--h-orange) var(--accent-s) calc(var(--accent-l) - 2%));
+    --orange-soft: hsl(var(--h-orange) var(--soft-s)   var(--soft-l));
+    --orange-line: hsl(var(--h-orange) var(--line-s)   var(--line-l));
+
+    --amber:      hsl(var(--h-amber)  var(--accent-s) calc(var(--accent-l) - 6%));
+    --amber-soft: hsl(var(--h-amber)  var(--soft-s)   var(--soft-l));
+    --amber-line: hsl(var(--h-amber)  var(--line-s)   var(--line-l));
+
+    --green:      hsl(var(--h-green)  var(--accent-s) calc(var(--accent-l) - 4%));
+    --green-soft: hsl(var(--h-green)  var(--soft-s)   var(--soft-l));
+    --green-line: hsl(var(--h-green)  var(--line-s)   var(--line-l));
+
+    --teal:      hsl(var(--h-teal)   var(--accent-s) calc(var(--accent-l) - 4%));
+    --teal-soft: hsl(var(--h-teal)   var(--soft-s)   var(--soft-l));
+    --teal-line: hsl(var(--h-teal)   var(--line-s)   var(--line-l));
+
+    --cyan:      hsl(var(--h-cyan)   var(--accent-s) calc(var(--accent-l) - 6%));
+    --cyan-soft: hsl(var(--h-cyan)   var(--soft-s)   var(--soft-l));
+    --cyan-line: hsl(var(--h-cyan)   var(--line-s)   var(--line-l));
+
+    --blue:      hsl(var(--h-blue)   var(--accent-s) var(--accent-l));
+    --blue-soft: hsl(var(--h-blue)   var(--soft-s)   var(--soft-l));
+    --blue-line: hsl(var(--h-blue)   var(--line-s)   var(--line-l));
+
+    --violet:      hsl(var(--h-violet) var(--accent-s) var(--accent-l));
+    --violet-soft: hsl(var(--h-violet) var(--soft-s)   var(--soft-l));
+    --violet-line: hsl(var(--h-violet) var(--line-s)   var(--line-l));
+
+    --pink:      hsl(var(--h-pink)   var(--accent-s) calc(var(--accent-l) - 2%));
+    --pink-soft: hsl(var(--h-pink)   var(--soft-s)   var(--soft-l));
+    --pink-line: hsl(var(--h-pink)   var(--line-s)   var(--line-l));
+
+    /* ── текущий акцент (по умолчанию — синий) ─────────────────────────── */
+    --c:       var(--blue);
+    --c-soft:  var(--blue-soft);
+    --c-line:  var(--blue-line);
+  }
+
+  /* ── классы акцента: задаются на контейнере, наследуются детьми ─────── */
+  .accent-red    { --c: var(--red);    --c-soft: var(--red-soft);    --c-line: var(--red-line); }
+  .accent-orange { --c: var(--orange); --c-soft: var(--orange-soft); --c-line: var(--orange-line); }
+  .accent-amber  { --c: var(--amber);  --c-soft: var(--amber-soft);  --c-line: var(--amber-line); }
+  .accent-green  { --c: var(--green);  --c-soft: var(--green-soft);  --c-line: var(--green-line); }
+  .accent-teal   { --c: var(--teal);   --c-soft: var(--teal-soft);   --c-line: var(--teal-line); }
+  .accent-cyan   { --c: var(--cyan);   --c-soft: var(--cyan-soft);   --c-line: var(--cyan-line); }
+  .accent-blue   { --c: var(--blue);   --c-soft: var(--blue-soft);   --c-line: var(--blue-line); }
+  .accent-violet { --c: var(--violet); --c-soft: var(--violet-soft); --c-line: var(--violet-line); }
+  .accent-pink   { --c: var(--pink);   --c-soft: var(--pink-soft);   --c-line: var(--pink-line); }
+}
+
+/* ==========================================================================
+   2. БАЗА
+   ========================================================================== */
+@layer cheat.base {
+
+  *,
+  *::before,
+  *::after { box-sizing: border-box; }
+
+  html { -webkit-text-size-adjust: 100%; }
+
+  body {
+    margin: 0;
+    padding: 26px 14px 40px;
+    background-color: var(--page);
+    background-image:
+      radial-gradient(60% 45% at 10% 0%,   var(--glow-1), transparent 70%),
+      radial-gradient(55% 45% at 92% 100%, var(--glow-2), transparent 70%);
+    background-repeat: no-repeat;
+    color: var(--ink);
+    font-family: "Segoe UI", system-ui, Arial, sans-serif;
+    font-size: 9pt;
+    line-height: 1.4;
+  }
+
+  h1, h2, h3, h4, p, ul, ol, pre, table { margin: 0; }
+  b, strong { font-weight: 700; }
+  a { color: inherit; }
+
+  code, kbd, pre {
+    font-family: "Cascadia Mono", Consolas, "Courier New", monospace;
+  }
+
+  /* ── страница A4 ─────────────────────────────────────────────────────── */
+  .sheet {
+    position: relative;
+    width: 210mm;
+    min-height: 297mm;
+    margin: 0 auto 28px;
+    padding: 10mm 10mm 11mm;
+    background: var(--sheet);
+    color: var(--ink);
+    border-radius: 6px;
+    box-shadow: var(--shadow);
+  }
+
+  /* ── две колонки ─────────────────────────────────────────────────────── */
+  .columns {
+    column-count: 2;
+    column-gap: 8mm;
+    column-rule: 1px solid var(--rule);
+  }
+
+  /* Секция может переноситься между колонками — иначе высокий блок
+     целиком уезжает вниз и оставляет пустоту. Атомарные части
+     (заголовок, код, выноска, таблица, пункт списка) не рвутся. */
+
+  /* на экране подвал листа прижат к низу страницы */
+  @media screen {
+    .sheet { display: flex; flex-direction: column; }
+    .columns { flex: 1 1 auto; }
+  }
+
+  /* ── на узком экране лист не ломает вёрстку ──────────────────────────── */
+  @media screen and (max-width: 820px) {
+    body { padding: 12px 8px 24px; }
+    .sheet {
+      width: 100%;
+      min-height: 0;
+      padding: 8mm 5mm;
+      border-radius: 4px;
+    }
+    .columns { column-count: 1; column-rule: 0; }
+  }
+}
+
+/* ==========================================================================
+   3. КОМПОНЕНТЫ
+   ========================================================================== */
+@layer cheat.components {
+
+  /* ── 3.1 Обложка ─────────────────────────────────────────────────────── */
+  .cover {
+    position: relative;
+    overflow: hidden;
+    padding: 12px 16px 11px;
+    margin: 0 0 10px;
+    border-radius: 6px;
+    background:
+      radial-gradient(120% 140% at 88% 10%, hsl(0 0% 100% / .22), transparent 58%),
+      linear-gradient(135deg, var(--cover-from), var(--cover-to));
+    color: var(--cover-ink);
+    break-inside: avoid;
+  }
+
+  .cover::after {
+    content: "";
+    position: absolute;
+    right: -46px;
+    top: -58px;
+    width: 190px;
+    height: 190px;
+    border-radius: 50%;
+    background: hsl(0 0% 100% / .12);
+    pointer-events: none;
+  }
+
+  .cover__eyebrow {
+    display: inline-block;
+    margin-bottom: 4px;
+    font-size: 7.6pt;
+    font-weight: 700;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    opacity: .82;
+  }
+
+  .cover__title {
+    position: relative;
+    z-index: 1;
+    font-size: 19pt;
+    font-weight: 800;
+    line-height: 1.1;
+    letter-spacing: .2px;
+  }
+
+  .cover__subtitle {
+    position: relative;
+    z-index: 1;
+    margin-top: 3px;
+    font-size: 8.6pt;
+    color: var(--cover-sub);
+  }
+
+  .cover__meta {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+    margin-top: 7px;
+  }
+
+  .cover .chip {
+    background: hsl(0 0% 100% / .16);
+    border-color: hsl(0 0% 100% / .38);
+    color: var(--cover-ink);
+  }
+
+  /* ── 3.2 Плашка заголовка листа ──────────────────────────────────────── */
+  .sheet-head {
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+    padding: 5px 13px 5px 11px;
+    margin: 0 0 12px;
+    background: linear-gradient(100deg, var(--c-soft), hsl(0 0% 100% / 0) 92%);
+    border-left: 5px solid var(--c);
+    border-radius: 4px;
+    break-after: avoid;
+    break-inside: avoid;
+  }
+
+  .sheet-number {
+    flex: none;
+    min-width: 1.1em;
+    font-size: 12pt;
+    font-weight: 800;
+    line-height: 1;
+    color: var(--c);
+    opacity: .5;
+  }
+
+  .sheet-title {
+    font-size: 14pt;
+    font-weight: 700;
+    line-height: 1.2;
+    letter-spacing: .2px;
+    color: var(--c);
+  }
+
+  /* ── 3.3 Секция и её заголовок ───────────────────────────────────────── */
+  .block { margin: 0 0 20px; }
+
+  .block-title {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    margin: 0 0 4px;
+    padding: 0 0 2px;
+    font-size: 10pt;
+    font-weight: 700;
+    line-height: 1.2;
+    color: var(--c);
+    border-bottom: 1.5px solid var(--c-line);
+    break-after: avoid;
+  }
+
+  .block-title::before {
+    content: "";
+    flex: none;
+    width: 8px;
+    height: 8px;
+    border-radius: 2px;
+    background: var(--c);
+    box-shadow: 0 0 0 3px var(--c-soft);
+  }
+
+  .block-title__hint {
+    margin-left: auto;
+    font-size: 7.6pt;
+    font-weight: 600;
+    letter-spacing: .04em;
+    color: var(--muted);
+  }
+
+  /* ── 3.4 Код ─────────────────────────────────────────────────────────── */
+  .code-block {
+    margin: 0 0 4px;
+    padding: 3px 7px 3px 9px;
+    background: var(--code-bg);
+    color: var(--code-ink);
+    border: 1px solid var(--rule);
+    border-left: 3px solid var(--c);
+    border-radius: 0 4px 4px 0;
+    font-size: 8pt;
+    line-height: 1.2;
+    white-space: pre-wrap;
+    word-break: break-word;
+    tab-size: 2;
+    break-inside: avoid;
+  }
+
+  /* выделенные имена методов */
+  .code-block b {
+    font-weight: 600;
+    color: var(--c);
+  }
+
+  /* ── 3.5 Подсветка синтаксиса ────────────────────────────────────────── */
+  .tok-keyword { color: var(--violet); }
+  .tok-string  { color: var(--green); }
+  .tok-number  { color: var(--amber); }
+  .tok-builtin { color: var(--cyan); }
+  .tok-function{ color: var(--c); font-weight: 600; }
+  .tok-comment { color: var(--muted); font-style: italic; }
+  .tok-punct   { color: var(--muted); }
+
+  /* ── 3.6 Списки ──────────────────────────────────────────────────────── */
+  .list {
+    margin: 0 0 6px;
+    padding: 0;
+    list-style: none;
+  }
+
+  .list > li {
+    position: relative;
+    margin: 2px 0;
+    padding-left: 13px;
+    font-size: 8.6pt;
+    line-height: 1.3;
+    break-inside: avoid;
+  }
+
+  .list > li::before {
+    content: "";
+    position: absolute;
+    left: 1px;
+    top: .45em;
+    width: 6px;
+    height: 6px;
+    border-radius: 1.5px;
+    background: var(--c);
+  }
+
+  .list--check > li::before {
+    content: "✓";
+    top: 0;
+    width: auto;
+    height: auto;
+    background: none;
+    color: var(--c);
+    font-size: 8.6pt;
+    font-weight: 700;
+    line-height: 1.4;
+  }
+
+  .list--tight > li { margin: 1px 0; }
+
+  /* ── 3.7 Заметка / выноска ───────────────────────────────────────────── */
+  .callout {
+    margin: 0 0 3px;
+    padding: 3px 7px 3px 9px;
+    font-size: 8.4pt;
+    line-height: 1.38;
+    background: var(--c-soft);
+    border-left: 3px solid var(--c);
+    border-radius: 0 3px 3px 0;
+    break-inside: avoid;
+  }
+
+  .callout__title {
+    display: block;
+    margin-bottom: 2px;
+    font-size: 7.8pt;
+    font-weight: 700;
+    letter-spacing: .06em;
+    text-transform: uppercase;
+    color: var(--c);
+  }
+
+  .callout--info   { --c: var(--blue);   --c-soft: var(--blue-soft);   --c-line: var(--blue-line); }
+  .callout--warn   { --c: var(--amber);  --c-soft: var(--amber-soft);  --c-line: var(--amber-line); }
+  .callout--ok     { --c: var(--green);  --c-soft: var(--green-soft);  --c-line: var(--green-line); }
+  .callout--danger { --c: var(--red);    --c-soft: var(--red-soft);    --c-line: var(--red-line); }
+
+  /* ── 3.8 Таблица ─────────────────────────────────────────────────────── */
+  .table {
+    width: 100%;
+    margin: 0 0 8px;
+    border-collapse: collapse;
+    font-size: 8.6pt;
+    break-inside: avoid;
+  }
+
+  .table th {
+    padding: 3px 6px;
+    text-align: left;
+    font-weight: 700;
+    color: var(--ink);
+    background: var(--c-soft);
+    border: 1px solid var(--c-line);
+  }
+
+  .table td {
+    padding: 3px 6px;
+    vertical-align: top;
+    border: 1px solid var(--rule);
+  }
+
+  .table tbody tr:nth-child(even) td { background: var(--zebra); }
+
+  /* ── 3.9 Чипы, клавиши, утилиты ──────────────────────────────────────── */
+  .chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 1px 7px;
+    font-size: 7.6pt;
+    font-weight: 600;
+    letter-spacing: .02em;
+    line-height: 1.5;
+    color: var(--c);
+    background: var(--c-soft);
+    border: 1px solid var(--c-line);
+    border-radius: 999px;
+    white-space: nowrap;
+  }
+
+  .chip--ok   { --c: var(--green); --c-soft: var(--green-soft); --c-line: var(--green-line); }
+  .chip--bad  { --c: var(--red);   --c-soft: var(--red-soft);   --c-line: var(--red-line); }
+
+  .kbd {
+    display: inline-block;
+    padding: 0 4px;
+    font-size: 8pt;
+    line-height: 1.5;
+    background: var(--code-bg);
+    border: 1px solid var(--rule);
+    border-bottom-width: 2px;
+    border-radius: 3px;
+  }
+
+  .text-muted { color: var(--muted); }
+  .text-small { font-size: 8pt; }
+
+  /* инлайн-код */
+  code {
+    padding: 0 3px;
+    font-size: 8.2pt;
+    color: var(--code-ink);
+    background: var(--code-bg);
+    border: 1px solid var(--rule);
+    border-radius: 3px;
+  }
+
+  .code-block code { padding: 0; border: 0; background: none; font-size: inherit; }
+
+  /* ── 3.10 Сетки ──────────────────────────────────────────────────────── */
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+  .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; }
+
+  /* ── 3.11 Подвал листа ───────────────────────────────────────────────── */
+  .sheet-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    margin-top: 4px;
+    padding-top: 3px;
+    font-size: 7.4pt;
+    color: var(--muted);
+    border-top: 1px solid var(--rule);
+  }
+
+  .page-number {
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+    color: var(--c);
+  }
+}
+
+/* ==========================================================================
+   4. ТЕМЫ (только экран; печать их нейтрализует)
+   ========================================================================== */
+@layer cheat.themes {
+
+  /* По умолчанию: paper — светлая, пастельные заливки. */
+
+  /* ── vivid: максимально ярко ─────────────────────────────────────────── */
+  [data-theme="vivid"] {
+    --page:      #e7edf9;
+    --soft-s:    100%;
+    --soft-l:    92%;
+    --accent-l:  45%;
+    --line-s:    70%;
+    --line-l:    80%;
+    --cover-l:   46%;
+    --glow-1:    hsl(218 90% 86% / .7);
+    --glow-2:    hsl(330 90% 88% / .55);
+  }
+
+  /* ── muted: приглушённая, почти монохром ─────────────────────────────── */
+  [data-theme="muted"] {
+    --page:      #f2f2ef;
+    --rule:      #e3e3de;
+    --zebra:     #fbfbf9;
+    --soft-s:    26%;
+    --soft-l:    96%;
+    --accent-s:  55%;
+    --accent-l:  38%;
+    --line-s:    30%;
+    --line-l:    88%;
+    --cover-l:   36%;
+    --cover-h2:  218;
+    --glow-1:    hsl(60 20% 92% / .5);
+    --glow-2:    hsl(200 20% 92% / .4);
+  }
+
+  /* ── dark: инверсионная ──────────────────────────────────────────────── */
+  [data-theme="dark"] {
+    color-scheme: dark;
+
+    --page:      #0a1120;
+    --sheet:     #141d2c;
+    --ink:       #e8eef9;
+    --muted:     #9fb0c7;
+    --rule:      #27354b;
+    --code-bg:   #101a29;
+    --code-ink:  #dbe4f3;
+    --zebra:     hsl(0 0% 100% / .035);
+    --shadow:    0 18px 44px -14px hsl(0 0% 0% / .7);
+    --glow-1:    hsl(218 80% 45% / .28);
+    --glow-2:    hsl(262 80% 45% / .22);
+
+    --soft-s:    45%;
+    --soft-l:    20%;
+    --accent-l:  70%;
+    --line-s:    40%;
+    --line-l:    38%;
+
+    --cover-l:   28%;
+    --cover-ink: #f8fbff;
+    --cover-sub: hsl(218 40% 88%);
+  }
+}
+
+/* ==========================================================================
+   5. ПЕЧАТЬ: от темы остаётся только оттенок H
+   ========================================================================== */
+@layer cheat.print {
+
+  @media print {
+    /* Селектор html[data-theme] специально сильнее [data-theme="…"],
+       поэтому тёмная тема тоже печатается светлой. */
+    html,
+    html[data-theme] {
+      color-scheme: light;
+
+      --page:     #ffffff;
+      --sheet:    #ffffff;
+      --ink:      #101828;
+      --muted:    #475467;
+      --rule:     #e6eaf1;
+      --code-bg:  #fcfcfd;
+      --code-ink: #1d2433;
+      --zebra:    #fbfbfd;
+
+      --soft-s:   45%;
+      --soft-l:   98.5%;   /* заливки почти белые */
+      --line-s:   40%;
+      --line-l:   90%;
+      --accent-l: 34%;     /* акценты темнее — чётче на белом */
+
+      --cover-l:   97%;
+      --cover-ink: var(--ink);
+      --cover-sub: var(--muted);
+      --glow-1:    transparent;
+      --glow-2:    transparent;
+    }
+
+    html,
+    body { background: #fff !important; }
+
+    body {
+      padding: 0;
+      font-size: 9pt;
+    }
+
+    .sheet {
+      width: auto;
+      min-height: 0;
+      margin: 0;
+      padding: 0;
+      border-radius: 0;
+      box-shadow: none;
+    }
+
+    .sheet + .sheet { break-before: page; }
+
+    /* подвал прижат к низу листа; для листа с обложкой запас меньше */
+    .columns { min-height: 710pt; }
+    .sheet--cover .columns { min-height: 640pt; }
+
+    .cover {
+      border-radius: 0;
+      border-bottom: 3px solid hsl(var(--cover-h1) 85% var(--accent-l));
+    }
+    .cover::after { display: none; }
+
+    .cover .chip {
+      background: #fff;
+      border-color: var(--c-line);
+      color: var(--ink);
+    }
+
+    /* блоки не рвутся посередине */
+    .cover,
+    .sheet-head,
+    .block-title,
+    .callout,
+    .table,
+    .list > li { break-inside: avoid; }
+
+    /* длинный код может переноситься между колонками/страницами,
+       иначе высокий блок целиком уезжает вниз и оставляет пустоту */
+    .code-block {
+      break-inside: avoid;
+    }
+
+    .block-title,
+    .sheet-head { break-after: avoid; }
+
+    /* выноска остаётся при своём коде, а не уезжает в начало колонки */
+    .callout { break-before: avoid; }
+
+    p, li { orphans: 3; widows: 3; }
+
+    /* панель переключения тем в витрине не печатается */
+    .theme-bar { display: none !important; }
+
+    * {
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+  }
+}
+
+@page {
+  size: A4;
+  margin: 10mm 10mm 10mm;
+}
